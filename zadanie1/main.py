@@ -1,0 +1,1 @@
+print("hello wor5ld cos tam ")
