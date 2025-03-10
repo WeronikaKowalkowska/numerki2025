@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 # schemat hornera
 def potega(podstawa, wykladnik):
     wynik = podstawa
@@ -9,7 +8,6 @@ def potega(podstawa, wykladnik):
         wynik = wynik * podstawa
         wykladnik = wykladnik - 1
     return wynik
-
 
 def horner(argument, wspolczynniki, dlugoscTablicy):
     wynik = 0
@@ -23,19 +21,14 @@ def horner(argument, wspolczynniki, dlugoscTablicy):
 
     return wynik
 
-
 x = np.linspace(-10, 10, 400)
-
-
 def wyswietl_wielomian(wspolczynniki, dlugoscTablicy):
     y = horner(x, wspolczynniki, dlugoscTablicy)
     return wyswietl_wykres(y)
 
-
 def wyswietl_funkcje(funkcja):
     y = funkcja(x)
     return wyswietl_wykres(y)
-
 
 def wyswietl_wykres(y):
     plt.plot(x, y)
@@ -43,18 +36,15 @@ def wyswietl_wykres(y):
     plt.axvline(0, color='black', linewidth=0.8)
     return plt
 
-
 def wyswietl_wynik_wielomianu(wspolczynniki, dlugoscTablicy, wynik):
     plot = wyswietl_wielomian(wspolczynniki, dlugoscTablicy)
     plot.scatter(wynik, horner(wynik, wspolczynniki, dlugoscTablicy), color='red', s=100)
     plot.show()
 
-
 def wyswietl_wynik_funkcji(funkcja, wynik):
     plot = wyswietl_funkcje(funkcja)
     plot.scatter(wynik, funkcja(wynik), color='red', s=100)
     plot.show()
-
 
 # metoda bisekcji
 def bisekcja_epsilon(a, b, funkcja, epsilon):
@@ -65,9 +55,7 @@ def bisekcja_epsilon(a, b, funkcja, epsilon):
             a = x_srodek
         if (funkcja(x_srodek) * funkcja(a) < 0):
             b = x_srodek
-
     return x_srodek
-
 
 def bisekcja_iteracje(a, b, funkcja, iteracje):
     x_srodek = (a + b) / 2
@@ -77,9 +65,7 @@ def bisekcja_iteracje(a, b, funkcja, iteracje):
             a = x_srodek
         if (funkcja(x_srodek) * funkcja(a) < 0):
             b = x_srodek
-
     return x_srodek
-
 
 # metoda falsi
 def falsi_iteracje(a, b, funkcja, iteracje):
@@ -110,39 +96,39 @@ def falsi_epsilon(a, b, funkcja, epsilon):
             b = x0
     return x0
 
-
-# menu
 # 1)WYBÓR FUNKCJI
 funkcje_map = {
-    'a': lambda x: x**3 + 5*x**2 - 2*x - 10,
-    'b': lambda x: 3*x**3 + 3*x**2 - 18*x,
-    'c': np.sin,
-    'd': np.cos,
-    'e': lambda x: 2**x,
-    'f': lambda x: (1/2)**x,
-    'g': lambda x: np.sin((1/2)*x),
-    'h': lambda x: np.cos(2*x + 1)
+    'a' or 'A': lambda x: x**3 + 5*x**2 - 2*x - 10,
+    'b' or 'B': lambda x: 3*x**3 + 3*x**2 - 18*x,
+    'c' or 'C': np.sin,
+    'd' or 'D': np.cos,
+    'e' or 'E': lambda x: 2**x,
+    'f' or 'F': lambda x: (1/2)**x,
+    'g' or 'G': lambda x: np.sin((1/2)*x),
+    'h' or 'H': lambda x: np.cos(2*x + 1)
 }
-test = True
+
 print("Wybierz funkcję:")
-print("\na) f(x) = x^3+5x^2−2x−10")
-print("\nb) f(x) = 3x^3+3x^2-18x")
-print("\nc) f(x) = sin(x)")
-print("\nd) f(x) = cos(x)")
-print("\ne) f(x) = 2^x")
-print("\nf) f(x) = (1/2)^x")
-print("\ng) f(x) = sin((1/2)x)")
-print("\nh) f(x) = cos(2x+1)")
+print("a) f(x) = x^3+5x^2−2x−10")
+print("b) f(x) = 3x^3+3x^2-18x")
+print("c) f(x) = sin(x)")
+print("d) f(x) = cos(x)")
+print("e) f(x) = 2^x")
+print("f) f(x) = (1/2)^x")
+print("g) f(x) = sin((1/2)x)")
+print("h) f(x) = cos(2x+1)")
+
+test = True
 funkcja = 0
 while (test):
     funkcja = input()
     if (ord(funkcja) >= 97 and ord(funkcja) <= 104 or ord(funkcja) >= 65 and ord(funkcja) <= 72):
-        #funcFunkcja = funkcja
         test = False
     else:
         print("Niepoprawny wybór funkcji. Wybierz ponownie: ")
-wybrana_funkcja=funkcje_map.get(funkcja.lower())
-    # wyswietl wykres wybranej funkcji
+
+wybrana_funkcja=funkcje_map.get(funkcja)
+# wyswietl wykres wybranej funkcji
 if (funkcja == 'a' or funkcja == 'A'):
     wyswietl_wielomian([1, 5, -2, -10], 4).show()
 if (funkcja == 'b' or funkcja == 'B'):
@@ -160,8 +146,8 @@ if (funkcja == 'g' or funkcja == 'G'):
 if (funkcja == 'h' or funkcja == 'H'):
     wyswietl_funkcje(np.cos(2 * x + 1)).show()
 
-    # 2)WYBÓR PRZEDZIAŁU
-    print("\nWybierz przedział określając jego krańce w postaci x1 i x2:")
+# 2)WYBÓR PRZEDZIAŁU
+print("\nWybierz przedział określając jego krańce w postaci x1 i x2:")
 x1 = 0
 x2 = 0
 while (test):
@@ -170,13 +156,13 @@ while (test):
     if (x1 > 0 and x2 < 0 or x1 < 0 and x2 > 0):
         test = False
     else:
-        print("\nBłędny przedział, podaj ponownie")
+        print("Błędny przedział, podaj ponownie")
         test = True
 
 # 3)WYBÓR KRYTERIUM ZATRZYMANIA
 print("\nWybierz kryterium zatrzymania:")
-print("\na) spełnienie warunku nałożonego na dokładność")
-print("\nb) osiągnięcie zadanej liczby iteracji")
+print("a) spełnienie warunku nałożonego na dokładność")
+print("b) osiągnięcie zadanej liczby iteracji")
 test = True
 while (test):
     kryterium = input()
@@ -227,7 +213,7 @@ while (test):
                     wyswietl_wynik_funkcji(np.cos(2 * x + 1), x0_falsi_epsilon)
                 test2 = False
         else:
-            print("\nBłędne dane, podaj ponownie")
+            print("Błędne dane, podaj ponownie")
             test2 = True
 
 # iteracje
@@ -248,5 +234,5 @@ if (kryterium == 'b' or kryterium == 'B'):
 
     test = False
 else:
-    print("\nBłędne kryterium, podaj ponownie")
+    print("Błędne kryterium, podaj ponownie")
     test = True
