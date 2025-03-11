@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from funkcje import wybor_funkcji
+
+
 # schemat hornera
 def potega(podstawa, wykladnik):
     wynik = podstawa
@@ -21,7 +24,7 @@ def horner(argument, wspolczynniki, dlugoscTablicy):
 
     return wynik
 
-x = np.linspace(-10, 10, 400)
+x = np.linspace(-50, 50, 400)
 def wyswietl_wielomian(wspolczynniki, dlugoscTablicy):
     y = horner(x, wspolczynniki, dlugoscTablicy)
     return wyswietl_wykres(y)
@@ -34,7 +37,6 @@ def wyswietl_wykres(y):
     plt.plot(x, y)
     plt.axhline(0, color='black', linewidth=0.8)
     plt.axvline(0, color='black', linewidth=0.8)
-    plt.title("Wykres funkcji")
     return plt
 
 def wyswietl_wynik_wielomianu(wspolczynniki, dlugoscTablicy, wynik):
@@ -82,7 +84,6 @@ def falsi_iteracje(a, b, funkcja, iteracje):
                 b = x0
     return pierwiastek
 
-
 def falsi_epsilon(a, b, funkcja, epsilon):
     if (funkcja(b) - funkcja(a) != 0):
       x0 = a - (funkcja(a) / (funkcja(b) - funkcja(a))) * (b - a)
@@ -98,17 +99,6 @@ def falsi_epsilon(a, b, funkcja, epsilon):
     return x0
 
 # 1)WYBÓR FUNKCJI
-funkcje_map = {
-    'a' or 'A': lambda x: x**3 + 5*x**2 - 2*x - 10,
-    'b' or 'B': lambda x: 3*x**3 + 3*x**2 - 18*x,
-    'c' or 'C': np.sin,
-    'd' or 'D': np.cos,
-    'e' or 'E': lambda x: 2**x,
-    'f' or 'F': lambda x: (1/2)**x,
-    'g' or 'G': lambda x: np.sin((1/2)*x),
-    'h' or 'H': lambda x: np.cos(2*x + 1)
-}
-
 print("Wybierz funkcję:")
 print("a) f(x) = x^3+5x^2−2x−10")
 print("b) f(x) = 3x^3+3x^2-18x")
@@ -120,30 +110,43 @@ print("g) f(x) = sin((1/2)x)")
 print("h) f(x) = cos(2x+1)")
 
 test = True
-funkcja = ""
+literka = ""
 while (test):
-    funkcja = input("Wybrano: ")
-    if (ord(funkcja) >= 97 and ord(funkcja) <= 104 or ord(funkcja) >= 65 and ord(funkcja) <= 72):
+    literka = input()
+    if (ord(literka) >= 97 and ord(literka) <= 104 or ord(literka) >= 65 and ord(literka) <= 72):
         test = False
     else:
         print("Niepoprawny wybór funkcji. Wybierz ponownie: ")
 
-wybrana_funkcja=funkcje_map.get(funkcja)
+funkcja=wybor_funkcji(literka)
+
+#wybrana_funkcja=funkcje_map.get(funkcja)
 # wyswietl wykres wybranej funkcji
-if (funkcja == 'a' or funkcja == 'A'):
+if (literka == 'a' or literka == 'A'):
     wyswietl_wielomian([1, 5, -2, -10], 4).show()
-if (funkcja == 'b' or funkcja == 'B'):
+if (literka == 'b' or literka == 'B'):
     wyswietl_wielomian([3, 3, -18, 0], 4).show()
-else:
-    wyswietl_funkcje(wybrana_funkcja)
+if (literka == 'c' or literka == 'C'):
+    wyswietl_funkcje(np.sin).show()
+if (literka == 'd' or literka == 'D'):
+    wyswietl_funkcje(np.cos).show()
+if (literka == 'e' or literka == 'E'):
+    wyswietl_funkcje(lambda x: 2**x).show()
+if (literka == 'f' or literka == 'F'):
+    wyswietl_funkcje(lambda x: (1/2)**x).show()
+if (literka == 'g' or literka == 'G'):
+    wyswietl_funkcje(lambda x: np.sin((1/2)*x)).show()
+if (literka == 'h' or literka == 'H'):
+    wyswietl_funkcje(lambda x: np.cos(2*x + 1)).show()
 
 # 2)WYBÓR PRZEDZIAŁU
-print("\nWybierz przedział określając jego krańce: ")
+print("\nWybierz przedział określając jego krańce w postaci x1 i x2:")
 x1 = 0
 x2 = 0
+test=True
 while (test):
-    x1 = int(input("x1: "))
-    x2 = int(input("x2: "))
+    x1 = int(input())
+    x2 = int(input())
     if (x1 > 0 and x2 < 0 or x1 < 0 and x2 > 0):
         test = False
     else:
@@ -156,7 +159,7 @@ print("a) spełnienie warunku nałożonego na dokładność")
 print("b) osiągnięcie zadanej liczby iteracji")
 test = True
 while (test):
-    kryterium = input("Wybrano: ")
+    kryterium = input()
 
     # dokladnosc
     if (kryterium == 'a' or kryterium == 'A' or kryterium == 'b' or kryterium == 'B'):
@@ -164,47 +167,48 @@ while (test):
         if (kryterium == 'a' or kryterium == 'A'):
             print("\nPodaj Epsilon: ")
             while (test2):
-                epsilon = float(input("Wybrano: "))
+                epsilon = float(input())
                 if (epsilon > 0):
                     print("Wykonanie metody bisekcji: ")
-                    x0_bisekcja_epsilon_wynik = bisekcja_epsilon(x1, x2, wybrana_funkcja, epsilon)
-                    if (funkcja == 'a' or funkcja == 'A'):
+                    x0_bisekcja_epsilon_wynik = bisekcja_epsilon(x1, x2, funkcja, epsilon)
+                    if (literka == 'a' or literka == 'A'):
                         wyswietl_wynik_wielomianu([1, 5, -2, -10], 4, x0_bisekcja_epsilon_wynik)
-                    if (funkcja == 'b' or funkcja == 'B'):
-                        wyswietl_wynik_wielomianu([3, 3, -18, 0], 4, x0_bisekcja_epsilon_wynik)
+                    if (literka == 'b' or literka == 'B'):
+                        wyswietl_wielomian([3, 3, -18, 0], 4, x0_bisekcja_epsilon_wynik)
                     else:
-                        wyswietl_funkcje(wybrana_funkcja, x0_bisekcja_epsilon_wynik)
+                        wyswietl_wynik_funkcji(funkcja, x0_bisekcja_epsilon_wynik)
+
                 print("Wykonanie metody regula falsi:")
-                x0_falsi_epsilon_wynik = falsi_epsilon(x1, x2, wybrana_funkcja, epsilon)
-                if (funkcja == 'a' or funkcja == 'A'):
-                    wyswietl_wynik_wielomianu([1, 5, -2, -10], 4, x0_falsi_epsilon_wynik)
-                if (funkcja == 'b' or funkcja == 'B'):
-                    wyswietl_wynik_wielomianu([3, 3, -18, 0], 4, x0_falsi_epsilon_wynik)
+                x0_falsi_epsilon = falsi_epsilon(x1, x2, funkcja, epsilon)
+                if (literka == 'a' or literka == 'A'):
+                    wyswietl_wynik_wielomianu([1, 5, -2, -10], 4, x0_falsi_epsilon)
+                if (literka == 'b' or literka == 'B'):
+                    wyswietl_wielomian([3, 3, -18, 0], 4, x0_falsi_epsilon)
                 else:
-                    wyswietl_funkcje(wybrana_funkcja, x0_falsi_epsilon_wynik)
+                    wyswietl_wynik_funkcji(funkcja, x0_falsi_epsilon)
                 test2 = False
-        #CZY DODAĆ WYSWIETLENIE MIEJSCA ZEROWEGO NA KONSOLI?
+        # iteracje
+        if (kryterium == 'b' or kryterium == 'B'):
+            print("\nPodaj liczbę iteracji: ")
+            test2 = True
+            while (test2):
+                iteracje = input()
+                if (iteracje.isdigit() and int(iteracje) > 0):
+                    print("Wykonanie metody bisekcji: ")
+                    x0_bisekcja_iteracje_wynik=bisekcja_iteracje(x1, x2, funkcja, int(iteracje))
+                    wyswietl_wynik_funkcji(funkcja,x0_bisekcja_iteracje_wynik)
+                    print("Wykonanie metody regula falsi:")
+                    x0_falsi_iteracje_wynik=falsi_iteracje(x1, x2, funkcja, int(iteracje))
+                    wyswietl_wynik_funkcji(funkcja, x0_falsi_iteracje_wynik)
+                    test2 = False
+                else:
+                    print("\nBłędne dane, podaj ponownie")
+                    test2 = True
+
+            test = False
+
         else:
             print("Błędne dane, podaj ponownie")
             test2 = True
+        test=False
 
-# iteracje
-if (kryterium == 'b' or kryterium == 'B'):
-    print("\nPodaj liczbę iteracji: ")
-    test2 = True
-    while (test2):
-        iteracje = input()
-        if (iteracje.isdigit() and int(iteracje) > 0):
-            print("Wykonanie metody bisekcji: ")
-            bisekcja_iteracje(x1, x2, funkcja, int(iteracje))
-            print("Wykonanie metody regula falsi:")
-            falsi_iteracje(x1, x2, funkcja, int(iteracje))
-            test2 = False
-        else:
-            print("\nBłędne dane, podaj ponownie")
-            test2 = True
-
-    test = False
-else:
-    print("Błędne kryterium, podaj ponownie")
-    test = True
