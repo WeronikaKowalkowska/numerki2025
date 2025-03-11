@@ -1,4 +1,5 @@
 import numpy as np
+
 def wybor_funkcji(literka):
     if (literka=='A' or literka=='a'):
         return lambda x: x**3 + 5*x**2 - 2*x - 10
