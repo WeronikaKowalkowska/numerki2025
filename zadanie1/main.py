@@ -39,14 +39,16 @@ def wyswietl_wykres(y):
     plt.axvline(0, color='black', linewidth=0.8)
     return plt
 
-def wyswietl_wynik_wielomianu(wspolczynniki, dlugoscTablicy, wynik):
+def wyswietl_wynik_wielomianu(wspolczynniki, dlugoscTablicy, wynik_bisekcji, wynik_falsi):
     plot = wyswietl_wielomian(wspolczynniki, dlugoscTablicy)
-    plot.scatter(wynik, horner(wynik, wspolczynniki, dlugoscTablicy), color='red', s=100)
+    plot.scatter(wynik_bisekcji, horner(wynik_bisekcji, wspolczynniki, dlugoscTablicy), color='red', s=100, marker='o')
+    plot.scatter(wynik_falsi, horner(wynik_falsi, wspolczynniki, dlugoscTablicy), color='red', s=100, marker='x')
     plot.show()
 
-def wyswietl_wynik_funkcji(funkcja, wynik):
+def wyswietl_wynik_funkcji(funkcja, wynik_bisekcji, wynik_falsi):
     plot = wyswietl_funkcje(funkcja)
-    plot.scatter(wynik, funkcja(wynik), color='red', s=100)
+    plot.scatter(wynik_bisekcji, funkcja(wynik_bisekcji), color='red', s=100, marker='o')
+    plot.scatter(wynik_falsi, funkcja(wynik_falsi), color='pink', s=100, marker='x')
     plot.show()
 
 # metoda bisekcji
@@ -171,21 +173,15 @@ while (test):
                 if (epsilon > 0):
                     print("Wykonanie metody bisekcji: ")
                     x0_bisekcja_epsilon_wynik = bisekcja_epsilon(x1, x2, funkcja, epsilon)
-                    if (literka == 'a' or literka == 'A'):
-                        wyswietl_wynik_wielomianu([1, 5, -2, -10], 4, x0_bisekcja_epsilon_wynik)
-                    if (literka == 'b' or literka == 'B'):
-                        wyswietl_wielomian([3, 3, -18, 0], 4, x0_bisekcja_epsilon_wynik)
-                    else:
-                        wyswietl_wynik_funkcji(funkcja, x0_bisekcja_epsilon_wynik)
-
-                print("Wykonanie metody regula falsi:")
-                x0_falsi_epsilon = falsi_epsilon(x1, x2, funkcja, epsilon)
+                    print("Wykonanie metody regula falsi:")
+                    x0_falsi_epsilon = falsi_epsilon(x1, x2, funkcja, epsilon)
+                    print("Wykonano metody")
                 if (literka == 'a' or literka == 'A'):
-                    wyswietl_wynik_wielomianu([1, 5, -2, -10], 4, x0_falsi_epsilon)
+                    wyswietl_wynik_wielomianu([1, 5, -2, -10], 4,x0_bisekcja_epsilon_wynik, x0_falsi_epsilon)
                 if (literka == 'b' or literka == 'B'):
-                    wyswietl_wielomian([3, 3, -18, 0], 4, x0_falsi_epsilon)
+                    wyswietl_wynik_wielomianu([3, 3, -18, 0], 4,x0_bisekcja_epsilon_wynik, x0_falsi_epsilon)
                 else:
-                    wyswietl_wynik_funkcji(funkcja, x0_falsi_epsilon)
+                    wyswietl_wynik_funkcji(funkcja,x0_bisekcja_epsilon_wynik, x0_falsi_epsilon )
                 test2 = False
         # iteracje
         if (kryterium == 'b' or kryterium == 'B'):
