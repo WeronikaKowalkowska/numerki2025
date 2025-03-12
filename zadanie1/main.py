@@ -1,10 +1,6 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
 from funkcje import *
-from wielomiany import *
 
-x = np.linspace(-50, 50, 400)
+x = np.linspace(-20, 20, 400)
 
 # 1) WYBÓR FUNKCJI
 print("Wybierz funkcję:")
@@ -44,13 +40,13 @@ test=True
 while (test):
     x1 = int(input("Wybrano x1: "))
     x2 = int(input("Wybrano x2: "))
-    if (x1 > 0 and x2 < 0 or x1 < 0 and x2 > 0):
+    if (x1 < 0 and x2 > 0):
         test = False
     else:
-        print("Błędny przedział(krańce powinny być różnych zanków), podaj ponownie")
+        print("Błędny przedział, podaj ponownie")
         test = True
 
-x = np.linspace(x1-10, x2+10, 10)
+x = np.linspace(x1-10, x2+10, 400)
 
 # 4) WYBÓR KRYTERIUM ZATRZYMANIA
 print("\nWybierz kryterium zatrzymania:")
