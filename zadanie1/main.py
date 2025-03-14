@@ -1,10 +1,9 @@
-#import numpy as np
-
-from metody import *
+from bisekcja import *
+from falsi import *
 from wykresy import *
 from funkcje import *
 
-x = np.linspace(-20, 20, 400)
+x = np.linspace(-20, 20, 400)       #zmienna służąca rozmieszczeniu punktów na osi OX wyświetlanych wykresów
 
 # 1) WYBÓR FUNKCJI
 print("Wybierz funkcję:")
@@ -17,21 +16,22 @@ print("f) f(x) = (1/2)^x")
 print("g) f(x) = sin((1/2)x)")
 print("h) f(x) = cos(2x+1)")
 
-test = True
-literka = ""
+test = True     #zmienna sprawdzająca poprwaność input
+literka = ""        #znak określający wybór funkcji podany przez użytkownika
 while test:
     literka = input("Wybrano: ")
-    if ord(literka) >= 97 and ord(literka) <= 104 or ord(literka) >= 65 and ord(literka) <= 72:
+    literka = literka.lower()       #zapewnienie odczytu jako mała litera
+    if 97<=ord(literka)<=104:
         test = False
     else:
         print("Niepoprawny wybór funkcji. Wybierz ponownie: ")
 
-funkcja = wybor_funkcji(literka)
+funkcja = wybor_funkcji(literka)        #przypisanie funkcji wyboru użytkownika
 
 # 2) WYŚWIETLENIE WYKRESU WYBRANEJ FUNKCJI
-if literka == 'a' or literka == 'A':
+if literka == 'a':
     wyswietl_wielomian(x,[1, 5, -2, -10]).show()
-elif literka == 'b' or literka == 'B':
+elif literka == 'b':
     wyswietl_wielomian(x, [3, 3, -18, 0]).show()
 else:
     wyswietl_funkcje(x,funkcja).show()
@@ -59,90 +59,84 @@ print("b) osiągnięcie zadanej liczby iteracji")
 test = True
 while test:
     kryterium = input("Wybrano: ")
+    kryterium = kryterium.lower()
     # DOKŁADNOŚĆ
-    if kryterium == 'a' or kryterium == 'A' or kryterium == 'b' or kryterium == 'B':
+    if kryterium == 'a'or kryterium == 'b':
         test2 = True
-        kryterium=kryterium.lower()
         if kryterium == 'a':
             print("\nPodaj Epsilon: ")
             while test2:
                 epsilon = float(input("Wybrano: "))
                 if epsilon > 0:
-                    if literka == 'a' or literka == 'A':
-                        #x0_bisekcja_epsilon_wynik= bisekcja_epsilon_wielomianu(x1, x2, [1, 5, -2, -10], epsilon)
+                    #BISEKCJA
+                    if literka == 'a':
+                                #przeprowadzenie bieskcji dla pierwszej funkcji wielomianowej dla zadanej dokładności
                         x0_bisekcja_epsilon_wynik=bisekcja(x1,x2, [1, 5, -2, -10],epsilon,None,'a',True,None)
-                    elif literka == 'b' or literka == 'B':
-                        #x0_bisekcja_epsilon_wynik = bisekcja_epsilon_wielomianu(x1, x2, [3, 3, -18, 0], epsilon)
+                    elif literka == 'b':
+                                # przeprowadzenie bieskcji dla drugiej funkcji wielomianowej dla zadanej dokładności
                         x0_bisekcja_epsilon_wynik = bisekcja(x1, x2, [3, 3, -18, 0], epsilon, None, 'a', True, None)
                     else:
-                         #x0_bisekcja_epsilon_wynik = float(bisekcja_epsilon(x1, x2, funkcja, epsilon))
+                                # przeprowadzenie bieskcji dla pozostałych funkcji dla zadanej dokładności
                          x0_bisekcja_epsilon_wynik = bisekcja(x1, x2,None, epsilon, 0, 'a', False, funkcja)
                     print("Wynik wykonanika metody bisekcji przy kryterium wybranej dokładności to: ", x0_bisekcja_epsilon_wynik)
-                    if literka == 'a' or literka == 'A':
-                        #x0_falsi_epsilon_wynik = falsi_epsilon_wielomianu(x1, x2, [1, 5, -2, -10], epsilon)
+
+                    #FALSI
+                    if literka == 'a':
+                                # przeprowadzenie regula falsi dla pierwszej funkcji wielomianowej dla zadanej dokładności
                         x0_falsi_epsilon_wynik =falsi(x1,x2, [1, 5, -2, -10], epsilon, None, 'a', True,None)
-                    elif literka == 'b' or literka == 'B':
-                        #x0_falsi_epsilon_wynik = falsi_epsilon_wielomianu(x1, x2, [3, 3, -18, 0], epsilon)
+                    elif literka == 'b':
+                                # przeprowadzenie regula falsi dla drugiej funkcji wielomianowej dla zadanej dokładności
                         x0_falsi_epsilon_wynik = falsi(x1, x2, [3, 3, -18, 0], epsilon, None, 'a', True, None)
                     else:
-                        #x0_falsi_epsilon_wynik = falsi_epsilon(x1, x2, funkcja, epsilon)
+                                # przeprowadzenie regula falsi dla pozostałych funkcji dla zadanej dokładności
                         x0_falsi_epsilon_wynik =falsi(x1, x2,None, epsilon, 0, 'a', False, funkcja)
                     print("Wynik wykonanika metody falsi przy kryterium wybranej dokładności to: ", x0_falsi_epsilon_wynik)
+
                     print("Zakończono wykonanie obu metod przy kryterium wybranej dokładności.")
-                    # WYŚWIETLENIE WYKRESÓW KOŃCOWYCH
-                    if literka == 'a' or literka == 'A':
-                        wyswietl_wynik_wielomianu(x, [1, 5, -2, -10], x0_bisekcja_epsilon_wynik, x0_falsi_epsilon_wynik)
-                        test2 = False
-                    elif literka == 'b' or literka == 'B':
-                        wyswietl_wynik_wielomianu(x, [3, 3, -18, 0], x0_bisekcja_epsilon_wynik, x0_falsi_epsilon_wynik)
-                        test2 = False
-                    else:
-                        wyswietl_wynik_funkcji(x,funkcja, x0_bisekcja_epsilon_wynik, x0_falsi_epsilon_wynik)
-                        test2 = False
+                    # WYŚWIETLENIE WYKRESÓW KOŃCOWYCH NA WSPÓLNYM WYKRESIE
+                    wyswietl_ogolne_wyniki(literka,x,x0_bisekcja_epsilon_wynik,x0_falsi_epsilon_wynik,funkcja)
+                    test2= False        #zakończenie programu
                 else:
-                    print("\nBłędne dane, podaj ponownie")
-                    test2 = True
+                    print("\nBłędne dane, podaj ponownie. Dokładność musi być dodatnia:")
+                    test2 = True        #ponowienie wyborów
         # ITERACJE
-        if kryterium == 'b' or kryterium == 'B':
+        if kryterium == 'b':
             print("\nPodaj liczbę iteracji: ")
             test2 = True
             while test2:
                 iteracje = input("Wybrano: ")
                 if iteracje.isdigit() and int(iteracje) > 0:
-                    if literka == 'a' or literka == 'A':
-                        #x0_bisekcja_iteracje_wynik = bisekcja_iteracje_wielomianu(x1, x2, [1, 5, -2, -10],int(iteracje))
+                    #BISEKCJA
+                    if literka == 'a' :
+                              # przeprowadzenie bieskcji dla pierwszej funkcji wielomianowej dla wybranej liczby iteracji
                         x0_bisekcja_iteracje_wynik=bisekcja(x1,x2,[1, 5, -2, -10],None,int(iteracje),'b',True,None)
-                    elif literka == 'b' or literka == 'B':
-                        #x0_bisekcja_iteracje_wynik = bisekcja_iteracje_wielomianu(x1, x2, [3, 3, -18, 0], int(iteracje))
+                    elif literka == 'b':
+                              # przeprowadzenie bieskcji dla drugiej funkcji wielomianowej dla wybranej liczby iteracji
                         x0_bisekcja_iteracje_wynik = bisekcja(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
                     else:
-                        #x0_bisekcja_iteracje_wynik = bisekcja_iteracje(x1, x2, funkcja, int(iteracje))
+                                # przeprowadzenie bieskcji dla pozostałych funkcji dla wybranej liczby iteracji
                         x0_bisekcja_iteracje_wynik = bisekcja(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
                     print("Wynik wykonanika metody bisekcji przy kryterium określonej ilości iteracji to: ", x0_bisekcja_iteracje_wynik)
-                    if literka == 'a' or literka == 'A':
-                        #x0_falsi_iteracje_wynik = falsi_iteracje_wielomianu(x1, x2, [1, 5, -2, -10], int(iteracje))
+
+                    #FALSI
+                    if literka == 'a':
+                                # przeprowadzenie regula falsi dla pierwszej funkcji wielomianowej dla wybranej liczby iteracji
                         x0_falsi_iteracje_wynik=falsi(x1, x2, [1, 5, -2, -10], None, int(iteracje), 'b', True, None)
-                    elif literka == 'b' or literka == 'B':
-                        #x0_falsi_iteracje_wynik = falsi_iteracje_wielomianu(x1, x2, [3, 3, -18, 0], int(iteracje))
+                    elif literka == 'b':
+                               # przeprowadzenie regula falsi dla drugiej funkcji wielomianowej dla wybranej liczby iteracji
                         x0_falsi_iteracje_wynik=falsi(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
                     else:
-                        #x0_falsi_iteracje_wynik = falsi_iteracje(x1, x2, funkcja, int(iteracje))
+                                # przeprowadzenie regula falsi dla pozostałych funkcji dla wybranej liczby iteracji
                         x0_falsi_iteracje_wynik=falsi(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
                     print("Wynik wykonanika metody falsi przy kryterium określonej ilości iteracji to: ", x0_falsi_iteracje_wynik)
+
                     print("Zakończono wykonanie obu metod przy kryterium określonej ilości iteracji.")
                     # WYŚWIETLENIE WYKRESÓW KOŃCOWYCH
-                    if literka == 'a' or literka == 'A':
-                        wyswietl_wynik_wielomianu(x, [1, 5, -2, -10], x0_bisekcja_iteracje_wynik,  x0_falsi_iteracje_wynik)
-                        test2 = False
-                    elif literka == 'b' or literka == 'B':
-                        wyswietl_wynik_wielomianu(x, [3, 3, -18, 0], x0_bisekcja_iteracje_wynik, x0_falsi_iteracje_wynik)
-                        test2 = False
-                    else:
-                        wyswietl_wynik_funkcji(x,funkcja, x0_bisekcja_iteracje_wynik, x0_falsi_iteracje_wynik)
-                        test2 = False
+                    wyswietl_ogolne_wyniki(literka, x, x0_bisekcja_iteracje_wynik, x0_falsi_iteracje_wynik, funkcja)
+                    test2 = False       #zakończenie programu
                 else:
-                    print("\nBłędne dane, podaj ponownie")
-                    test2 = True
+                    print("\nBłędne dane, podaj ponownie. Liczba iteracji musi być naturalna: ")
+                    test2 = True        #ponowienie wyborów
         test = False
     else:
         print("\nBłędne dane, podaj ponownie")
