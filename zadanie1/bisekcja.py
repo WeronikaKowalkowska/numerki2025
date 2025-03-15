@@ -18,13 +18,15 @@ def bisekcja_wielomian(a,b,wspolczynniki,x_srodek):
 
 #ogólna realizacja bisekcji dla wszystkich wbudowanych funkcji
 def bisekcja(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcja):
+    ile_iteracji = 0
     if czy_wielomian:
         #dokładność
         if kryterium == 'a':
             x_srodek = 0
             while abs(horner((a + b) / 2, wspolczynniki)) >= epsilon:
                 x_srodek,a,b=bisekcja_wielomian(a, b, wspolczynniki, (a + b)/2)
-            return x_srodek
+                ile_iteracji += 1
+            return x_srodek, ile_iteracji
         # iteracje
         else:
             x_srodek = 0
@@ -37,7 +39,8 @@ def bisekcja(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,fun
             x_srodek = 0
             while abs(funkcja(x_srodek)) >= epsilon:
                 x_srodek,a,b=bisekcja_funkcji(a,b,funkcja,(a + b)/2)
-            return x_srodek
+                ile_iteracji += 1
+            return x_srodek, ile_iteracji
         #iteracje
         else:
             x_srodek = 0

@@ -24,6 +24,7 @@ def falsi_wielomianu(a,b,wspolczynniki,horner_a,horner_b):
 
 #ogólna realizacja regula falsi dla wszystkich wbudowanych funkcji
 def falsi(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcja):
+    ile_iteracji = 0
     if czy_wielomian:
         horner_a = horner(a, wspolczynniki)
         horner_b = horner(b, wspolczynniki)
@@ -34,7 +35,8 @@ def falsi(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcj
             while abs(horner_x0) >= epsilon:
                 a,b,x0=falsi_wielomianu(a,b,wspolczynniki,horner(a, wspolczynniki),horner(b, wspolczynniki))
                 horner_x0 = horner(x0, wspolczynniki)
-            return x0
+                ile_iteracji += 1
+            return x0, ile_iteracji
         # iteracje
         else:
             x0 = 0
@@ -47,7 +49,8 @@ def falsi(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcj
             x0 = a - (funkcja(a) / (funkcja(b) - funkcja(a))) * (b - a)
             while abs(funkcja(x0)) >= epsilon:
                 a,b,x0=falsi_funkcji(a,b,x0)
-            return x0
+                ile_iteracji += 1
+            return x0, ile_iteracji
         #iteracje
         else:
             x0 = 0
