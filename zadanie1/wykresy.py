@@ -24,7 +24,7 @@ def wyswietl_wielomian(x, wspolczynniki):
 #funkcja wyświetlająca wykres funkcji wielomianowej wraz z miejscem zerowym
 def wyswietl_wynik_wielomianu(x, wspolczynniki, wynik_bisekcji, wynik_falsi):
     plot = wyswietl_wielomian(x, wspolczynniki)
-    plot.scatter(wynik_bisekcji, horner(wynik_bisekcji, wspolczynniki), color='yellow', s=100, marker='o',
+    plot.scatter(wynik_bisekcji, horner(wynik_bisekcji, wspolczynniki), color='green', s=100, marker='o',
                  label="Bisekcja")
     plot.scatter(wynik_falsi, horner(wynik_falsi, wspolczynniki), color='magenta', s=100, marker='x',
                  label="Metoda falsi")

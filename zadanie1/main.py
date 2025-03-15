@@ -44,11 +44,24 @@ test=True
 while test:
     x1 = float(input("Wybrano x1: "))
     x2 = float(input("Wybrano x2: "))
-    if x1 < 0 < x2:
+
+    wielomiany = {
+        'a': [1, 5, -2, -10],
+        'b': [3, 3, -18, 0]
+    }
+
+    if literka in wielomiany:
+        wartosc1 = horner(x1, wielomiany[literka])
+        wartosc2 = horner(x2, wielomiany[literka])
+    else:
+        wartosc1 = funkcja(x1)
+        wartosc2 = funkcja(x2)
+
+    if wartosc1 * wartosc2 < 0:
         test = False
     else:
         print("Błędny przedział, podaj ponownie")
-        test = True
+
 
 x = np.linspace(x1-10, x2+10, 400)
 
