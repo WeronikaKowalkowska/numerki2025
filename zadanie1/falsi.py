@@ -29,8 +29,8 @@ def falsi(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcj
         horner_b = horner(b, wspolczynniki)
         # dokładność
         if kryterium == 'a':
-            if horner_a == horner_b: #TU DODAŁAM
-                return (a + b) / 2
+            # if horner_a == horner_b: #TU DODAŁAM
+            #     return (a + b) / 2
             x0 = a - (horner_a / (horner_b - horner_a)) * (b - a)
             horner_x0 = horner(x0, wspolczynniki)
             while abs(horner_x0) >= epsilon:
@@ -46,8 +46,8 @@ def falsi(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,funkcj
     else:
         #dokładność
         if kryterium == 'a':
-            if funkcja(a) == funkcja(b): #TU DODAŁAM
-                return (a + b) / 2
+            # if funkcja(a) == funkcja(b): #TU DODAŁAM
+            #     return (a + b) / 2
             x0 = a - (funkcja(a) / (funkcja(b) - funkcja(a))) * (b - a)
             while abs(funkcja(x0)) >= epsilon:
                 a,b,x0=falsi_funkcji(a,b,x0)

@@ -57,7 +57,7 @@ while test:
         wartosc1 = funkcja(x1)
         wartosc2 = funkcja(x2)
 
-    if wartosc1 * wartosc2 < 0:
+    if wartosc1 * wartosc2 < 0 and x1 < x2:
         test = False
     else:
         print("Błędny przedział, podaj ponownie")
