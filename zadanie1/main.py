@@ -93,7 +93,7 @@ while test:
                     else:
                                 # przeprowadzenie bieskcji dla pozostałych funkcji dla zadanej dokładności
                          x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2,None, epsilon, 0, 'a', False, funkcja)
-                    print("Wynik wykonanika metody bisekcji przy kryterium wybranej dokładności to: ", x0_bisekcja_epsilon_wynik)
+                    print("Wynik wykonania metody bisekcji przy kryterium wybranej dokładności to: ", x0_bisekcja_epsilon_wynik)
                     print("Zostało wykonane ", ile_iletacji_bisekcja, " iteracji.")
 
                     #FALSI
@@ -106,7 +106,7 @@ while test:
                     else:
                                 # przeprowadzenie regula falsi dla pozostałych funkcji dla zadanej dokładności
                         x0_falsi_epsilon_wynik, ile_iletacji_falsi = falsi(x1, x2,None, epsilon, 0, 'a', False, funkcja)
-                    print("Wynik wykonanika metody falsi przy kryterium wybranej dokładności to: ", x0_falsi_epsilon_wynik)
+                    print("Wynik wykonania metody falsi przy kryterium wybranej dokładności to: ", x0_falsi_epsilon_wynik)
                     print("Zostało wykonane ", ile_iletacji_falsi, " iteracji.")
 
                     print("Zakończono wykonanie obu metod przy kryterium wybranej dokładności.")
@@ -133,7 +133,7 @@ while test:
                     else:
                                 # przeprowadzenie bieskcji dla pozostałych funkcji dla wybranej liczby iteracji
                         x0_bisekcja_iteracje_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
-                    print("Wynik wykonanika metody bisekcji przy kryterium określonej ilości iteracji to: ", x0_bisekcja_iteracje_wynik)
+                    print("Wynik wykonania metody bisekcji przy kryterium określonej ilości iteracji to: ", x0_bisekcja_iteracje_wynik)
 
                     #FALSI
                     if literka == 'a':
@@ -145,7 +145,7 @@ while test:
                     else:
                                 # przeprowadzenie regula falsi dla pozostałych funkcji dla wybranej liczby iteracji
                         x0_falsi_iteracje_wynik, ile_iletacji_falsi=falsi(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
-                    print("Wynik wykonanika metody falsi przy kryterium określonej ilości iteracji to: ", x0_falsi_iteracje_wynik)
+                    print("Wynik wykonania metody falsi przy kryterium określonej ilości iteracji to: ", x0_falsi_iteracje_wynik)
 
                     print("Zakończono wykonanie obu metod przy kryterium określonej ilości iteracji.")
                     # WYŚWIETLENIE WYKRESÓW KOŃCOWYCH

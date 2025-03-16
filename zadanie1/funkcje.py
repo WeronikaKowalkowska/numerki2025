@@ -30,6 +30,16 @@ def sprawdz_warunki(funkcja,x_srodek,a,b):
         b = x_srodek
     return x_srodek,a,b
 
+def sprawdz_warunki_wielomianu(a,b,wspolczynniki,x_srodek):
+    horner_x_srodek = horner(x_srodek, wspolczynniki)
+    if horner_x_srodek == 0:
+        return x_srodek, a, b
+    if horner_x_srodek * horner(b, wspolczynniki) < 0:
+        a = x_srodek
+    if horner_x_srodek * horner(a, wspolczynniki) < 0:
+        b = x_srodek
+    return x_srodek, a, b
+
 #funkcja realizująca schemat hornera
 def horner(argument, wspolczynniki):
     wynik = wspolczynniki[0]
