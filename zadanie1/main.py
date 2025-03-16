@@ -11,8 +11,8 @@ print("a) f(x) = x^3+5x^2−2x−10")
 print("b) f(x) = 3x^3+3x^2-18x")
 print("c) f(x) = sin(x)")
 print("d) f(x) = cos(x)")
-print("e) f(x) = 2^x")
-print("f) f(x) = (1/2)^x")
+print("e) f(x) = 2^x - 6")
+print("f) f(x) = (1/2)^x - 2")
 print("g) f(x) = sin((1/2)x)")
 print("h) f(x) = cos(2x+1)")
 
@@ -86,10 +86,10 @@ while test:
                     #BISEKCJA
                     if literka == 'a':
                                 #przeprowadzenie bieskcji dla pierwszej funkcji wielomianowej dla zadanej dokładności
-                        x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja=bisekcja(x1,x2, [1, 5, -2, -10],epsilon,None,'a',True,None)
+                        x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja=bisekcja(x1,x2, [1, 5, -2, -10],epsilon,0,'a',True,None)
                     elif literka == 'b':
                                 # przeprowadzenie bieskcji dla drugiej funkcji wielomianowej dla zadanej dokładności
-                        x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2, [3, 3, -18, 0], epsilon, None, 'a', True, None)
+                        x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2, [3, 3, -18, 0], epsilon, 0, 'a', True, None)
                     else:
                                 # przeprowadzenie bieskcji dla pozostałych funkcji dla zadanej dokładności
                          x0_bisekcja_epsilon_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2,None, epsilon, 0, 'a', False, funkcja)
@@ -99,13 +99,13 @@ while test:
                     #FALSI
                     if literka == 'a':
                                 # przeprowadzenie regula falsi dla pierwszej funkcji wielomianowej dla zadanej dokładności
-                        x0_falsi_epsilon_wynik, ile_iletacji_falsi =falsi(x1,x2, [1, 5, -2, -10], epsilon, None, 'a', True,None)
+                        x0_falsi_epsilon_wynik, ile_iletacji_falsi =falsi(x1,x2, [1, 5, -2, -10], epsilon, 0, 'a', True,None)
                     elif literka == 'b':
                                 # przeprowadzenie regula falsi dla drugiej funkcji wielomianowej dla zadanej dokładności
-                        x0_falsi_epsilon_wynik, ile_iletacji_falsi = falsi(x1, x2, [3, 3, -18, 0], epsilon, None, 'a', True, None)
+                        x0_falsi_epsilon_wynik, ile_iletacji_falsi = falsi(x1, x2, [3, 3, -18, 0], epsilon, 0, 'a', True, None)
                     else:
                                 # przeprowadzenie regula falsi dla pozostałych funkcji dla zadanej dokładności
-                        x0_falsi_epsilon_wynik =falsi(x1, x2,None, epsilon, 0, 'a', False, funkcja)
+                        x0_falsi_epsilon_wynik, ile_iletacji_falsi = falsi(x1, x2,None, epsilon, 0, 'a', False, funkcja)
                     print("Wynik wykonanika metody falsi przy kryterium wybranej dokładności to: ", x0_falsi_epsilon_wynik)
                     print("Zostało wykonane ", ile_iletacji_falsi, " iteracji.")
 
@@ -126,25 +126,25 @@ while test:
                     #BISEKCJA
                     if literka == 'a' :
                               # przeprowadzenie bieskcji dla pierwszej funkcji wielomianowej dla wybranej liczby iteracji
-                        x0_bisekcja_iteracje_wynik=bisekcja(x1,x2,[1, 5, -2, -10],None,int(iteracje),'b',True,None)
+                        x0_bisekcja_iteracje_wynik, ile_iletacji_bisekcja=bisekcja(x1,x2,[1, 5, -2, -10],None,int(iteracje),'b',True,None)
                     elif literka == 'b':
                               # przeprowadzenie bieskcji dla drugiej funkcji wielomianowej dla wybranej liczby iteracji
-                        x0_bisekcja_iteracje_wynik = bisekcja(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
+                        x0_bisekcja_iteracje_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
                     else:
                                 # przeprowadzenie bieskcji dla pozostałych funkcji dla wybranej liczby iteracji
-                        x0_bisekcja_iteracje_wynik = bisekcja(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
+                        x0_bisekcja_iteracje_wynik, ile_iletacji_bisekcja = bisekcja(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
                     print("Wynik wykonanika metody bisekcji przy kryterium określonej ilości iteracji to: ", x0_bisekcja_iteracje_wynik)
 
                     #FALSI
                     if literka == 'a':
                                 # przeprowadzenie regula falsi dla pierwszej funkcji wielomianowej dla wybranej liczby iteracji
-                        x0_falsi_iteracje_wynik=falsi(x1, x2, [1, 5, -2, -10], None, int(iteracje), 'b', True, None)
+                        x0_falsi_iteracje_wynik, ile_iletacji_falsi=falsi(x1, x2, [1, 5, -2, -10], None, int(iteracje), 'b', True, None)
                     elif literka == 'b':
                                # przeprowadzenie regula falsi dla drugiej funkcji wielomianowej dla wybranej liczby iteracji
-                        x0_falsi_iteracje_wynik=falsi(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
+                        x0_falsi_iteracje_wynik, ile_iletacji_falsi=falsi(x1, x2, [3, 3, -18, 0], None, int(iteracje), 'b', True, None)
                     else:
                                 # przeprowadzenie regula falsi dla pozostałych funkcji dla wybranej liczby iteracji
-                        x0_falsi_iteracje_wynik=falsi(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
+                        x0_falsi_iteracje_wynik, ile_iletacji_falsi=falsi(x1, x2, None, None, int(iteracje), 'b', False, funkcja)
                     print("Wynik wykonanika metody falsi przy kryterium określonej ilości iteracji to: ", x0_falsi_iteracje_wynik)
 
                     print("Zakończono wykonanie obu metod przy kryterium określonej ilości iteracji.")

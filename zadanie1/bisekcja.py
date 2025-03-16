@@ -32,7 +32,7 @@ def bisekcja(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,fun
             x_srodek = 0
             for i in range(iteracje):
                 x_srodek,a,b = bisekcja_wielomian(a, b, wspolczynniki, (a + b)/2)
-            return x_srodek
+            return x_srodek, iteracje
     else:
         #dokładność
         if kryterium == 'a':
@@ -46,4 +46,4 @@ def bisekcja(a, b, wspolczynniki, epsilon,iteracje, kryterium, czy_wielomian,fun
             x_srodek = 0
             for i in range(iteracje):
                 x_srodek, a, b = bisekcja_funkcji(a, b, funkcja, (a + b) / 2)
-            return x_srodek
+            return x_srodek, iteracje

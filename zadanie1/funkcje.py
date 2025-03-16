@@ -7,13 +7,13 @@ def wybor_funkcji(literka):
     if literka == 'b':
         return lambda x: 3 * x ** 3 + 3 * x ** 2 - 18 * x
     if literka == 'c':
-        return np.sin
+        return lambda x: np.sin(x)
     if literka == 'd':
-        return np.cos
+        return lambda x: np.cos(x)
     if literka == 'e':
-        return lambda x: 2 ** x
+        return lambda x: 2 ** x - 6
     if literka == 'f':
-        return lambda x: (1 / 2) ** x
+        return lambda x: (1 / 2) ** x - 2
     if literka == 'g':
         return lambda x: np.sin((1 / 2) * x)
     if literka == 'h':
