@@ -11,7 +11,7 @@ def wybor_funkcji(literka):
     if literka == 'd':
         return lambda x: np.cos(x)
     if literka == 'e':
-        return lambda x: 2 ** x - 6
+        return lambda x: 2 ** x - 4
     if literka == 'f':
         return lambda x: (1 / 2) ** x - 2
     if literka == 'g':
