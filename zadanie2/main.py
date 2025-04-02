@@ -1,4 +1,7 @@
 import numpy as np
+
+from funkcje import gauss_seidel_accurancy, choose_function, gauss_seidel_iterations
+
 #W metodach iteracyjnych przed przystapieniem do obliczeň naležy sprawdzač czy podana macierz spelnia warunki zbiežnošci. Metody iteracyjne powinny posiadač dwa možliwe warunki stopu: ilošč iteracji albo uzyskanie podanej przez
 #užytkownika dokladnošci (analogicznie do zadania 1).
 matrix_a=([3,3,1],[2,5,7],[1,2,1])
@@ -33,16 +36,46 @@ while(continueProgram):
     print("l) zakończ program ")
 
     test = True
-    literka = ""
+    letter = ""
     while test:
-        literka = input("Wybrano: ").lower()
-        if 97 <= ord(literka) <= 107:
+        letter = input("Wybrano: ").lower()
+        if 97 <= ord(letter) <= 107:
             test = False
-        elif ord(literka)==108:
+        elif ord(letter)==108:
             continueProgram=False
         else:
             print("Niepoprawny wybór macierzy. Wybierz ponownie: ")
 
-    
+    test = True
+    while test:
+        cryterium= input("Wybierz kryterium stopu: a) liczba iteracji   b) osiągnięcie dokładności wyniku ").lower()
+        if cryterium == "a":
+            test2=True
+            while test2:
+                iterations=input("Podaj liczbę iteracji do wykonania:")
+                if iterations.isdigit():
+                    print("Wykonuję metodę Gaussa- Seidla dla ",iterations, "iteracji: ")
+                    chosen_matrix, vector = choose_function(letter)
+                    gauss_seidel_iterations(chosen_matrix, vector, iterations)
+                    test2=False
+                else:
+                    print("Wprowadzona wartość jest niepoprawna. Spróbuj ponownie: ")
 
+
+            test = False
+        if cryterium == "b":
+            test2 = True
+            while test2:
+                accurancy = input("Podaj dokładność wyniku:")
+                if accurancy.isdigit():
+                    print("Wykonuję metodę Gaussa- Seidla dla osiągnięcia dokładnosci ", accurancy)
+                    chosen_matrix,vector=choose_function(letter)
+                    gauss_seidel_accurancy(chosen_matrix,vector,accurancy)
+                    test2 = False
+                else:
+                    print("Wprowadzona wartość jest niepoprawna. Spróbuj ponownie: ")
+
+            test = False
+        else:
+            print("Niepoprawny wybór kryterium. Wybierz ponownie: ")
 
