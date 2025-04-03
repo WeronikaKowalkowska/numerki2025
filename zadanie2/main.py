@@ -1,39 +1,59 @@
 import numpy as np
 
-from funkcje import gauss_seidel_accurancy, choose_function, gauss_seidel_iterations
+from funkcje import choose_function, gauss_seidel_iterations, matrix_a, matrix_b, matrix_c, matrix_d, matrix_e, \
+    matrix_f, matrix_g, matrix_h, matrix_i, matrix_j, have_solution, show_matrix
 
-#W metodach iteracyjnych przed przystapieniem do obliczeň naležy sprawdzač czy podana macierz spelnia warunki zbiežnošci. Metody iteracyjne powinny posiadač dwa možliwe warunki stopu: ilošč iteracji albo uzyskanie podanej przez
-#užytkownika dokladnošci (analogicznie do zadania 1).
-matrix_a=([3,3,1],[2,5,7],[1,2,1])
-matrix_b=([3,3,1],[2,5,7],[-4,-10,-14])
-matrix_c=([3,3,1],[2,5,7],[-4,-10,-14])
-matrix_d=([0.5,-0.0625,0.1875,0.0625],[-0.0625,0.5,0,0],[0.1875,0,0.375,0.125],[0.0625,0,0.125,0.25])
-matrix_e=([3,2,1,-1],[5,-1,1,2],[1,-1,1,2],[7,8,1,-7])
-matrix_f=([3,-1,2,-1],[3,-1,1,1],[1,2,-1,2],[-1,1,-2,-3])
-matrix_g=([0,0,1],[1,0,0],[0,1,0])
-matrix_h=([10,-5,1],[4,-7,2],[5,1,4])
-matrix_i=([6,-4,2],[-5,5,2],[0.9,0.9,3.6])
-matrix_j=([1,0.2,0.3],[0.1,1,-0.3],[-0.1,-0.2,1])
+#W metodach iteracyjnych przed przystapieniem do obliczeń należy sprawdzać czy podana macierz spelnia warunki zbieżności.
+#Metody iteracyjne powinny posiadać dwa możliwe warunki stopu: ilość iteracji albo uzyskanie podanej przez użytkownika dokladności (analogicznie do zadania 1).
 
-#menu
+
+#MENU
 continueProgram=True
-while(continueProgram):
+
+
+def gauss_seidel_accurancy(chosen_matrix, vector, accurancy):
+    pass
+
+
+while continueProgram:
     print("Wybierz przykład do rozwiązania: ")
     #macierze 3x3
-    print("a) ",matrix_a, " * [x1, x2, x3] = [12, 33, 8]")  #x1=1   x2=2    x3=3
-    print("b) ",matrix_b, " * [x1, x2, x3] = [1, 20, -40]") # nieoznaczony
-    print("c) ",matrix_c, " * [x1, x2, x3] = [1, 20, -20]") # sprzeczny
+    print("a)")
+    chosen_matrix, vector = choose_function('a')
+    show_matrix(chosen_matrix, vector)  # x1=1,   x2=2,    x3=3
+    print("b)")
+    chosen_matrix, vector = choose_function('b')
+    show_matrix(chosen_matrix, vector) # nieoznaczony
+    print("c)")
+    chosen_matrix, vector = choose_function('c')
+    show_matrix(chosen_matrix, vector)  # sprzeczny
     #macierze 4x4
-    print("d) ",matrix_d, " * [x1, x2, x3, x4] = [1.5, -1.625, 1, 0.4375]")     #x1=2,  x2=-3,  x3=1.5,     x4=0.5
-    print("e) ", matrix_e, " * [x1, x2, x3, x4] = [0, -4, 4, 6]")   #sprzeczny
-    print("f) ", matrix_f, " * [x1, x2, x3, x4] = [-13, 1, 21, -5]")    #x1=1, x2=3, x3=-4, x4=5
+    print("d)")
+    chosen_matrix, vector = choose_function('d')
+    show_matrix(chosen_matrix, vector)  #  x1=2,  x2=-3,  x3=1.5,   x4=0.5
+    print("e)")
+    chosen_matrix, vector = choose_function('e')
+    show_matrix(chosen_matrix, vector)  # sprzeczny
+    print("f)")
+    chosen_matrix, vector = choose_function('f')
+    show_matrix(chosen_matrix, vector)  # x1=1, x2=3, x3=-4, x4=5
     #macierze 3x3
-    print("g) ",matrix_g, " * [x1, x2, x3] = [3, 7, 5]")  #x1=7   x2=5    x3=3
-    print("h) ",matrix_h, " * [x1, x2, x3] = [3, -4, 19]")  #x1=1   x2=2    x3=3
-    print("i) ",matrix_i, " * [x1, x2, x3] = [4, 11, 13.5]")  #sprzeczny
-    print("j) ",matrix_j, " * [x1, x2, x3] = [1.5, 0.8, 0.7]")  #x1=1   x2=1    x3=1
-    print("k) wczytaj macierz z pliku ")
-    print("l) zakończ program ")
+    print("g)")
+    chosen_matrix, vector = choose_function('g')
+    show_matrix(chosen_matrix, vector)  #  #x1=7,   x2=5,    x3=3
+    print("h)")
+    chosen_matrix, vector = choose_function('h')
+    show_matrix(chosen_matrix, vector)  # x1=1,   x2=2,  ,x3=3
+    print("i)")
+    chosen_matrix, vector = choose_function('i')
+    show_matrix(chosen_matrix, vector)  # sprzeczny
+    print("j)")
+    chosen_matrix, vector = choose_function('j')
+    show_matrix(chosen_matrix, vector)  # x1=1,   x2=1,    x3=1
+    print("k)")
+    print("wczytaj macierz z pliku")
+    print("l)")
+    print("zakończ program")
 
     test = True
     letter = ""
@@ -46,6 +66,14 @@ while(continueProgram):
         else:
             print("Niepoprawny wybór macierzy. Wybierz ponownie: ")
 
+    # test = True
+    # while test:
+    #     chosen_matrix, vector = choose_function(letter)
+    #     if have_solution(chosen_matrix) is False:
+    #         print("Wybrana macierz nie spełnia warunku przekątniowej dominacji wierszowej, zatem może nie mieć rozwiązania. Wybierz inną macierz.")
+    #     else:
+    #         test = False
+
     test = True
     while test:
         cryterium= input("Wybierz kryterium stopu: a) liczba iteracji   b) osiągnięcie dokładności wyniku ").lower()
@@ -54,7 +82,7 @@ while(continueProgram):
             while test2:
                 iterations=input("Podaj liczbę iteracji do wykonania:")
                 if iterations.isdigit():
-                    print("Wykonuję metodę Gaussa- Seidla dla ",iterations, "iteracji: ")
+                    print("Wykonuję metodę Gaussa-Seidla dla", iterations, "iteracji: ")
                     chosen_matrix, vector = choose_function(letter)
                     gauss_seidel_iterations(chosen_matrix, vector, iterations)
                     test2=False
@@ -68,7 +96,7 @@ while(continueProgram):
             while test2:
                 accurancy = input("Podaj dokładność wyniku:")
                 if accurancy.isdigit():
-                    print("Wykonuję metodę Gaussa- Seidla dla osiągnięcia dokładnosci ", accurancy)
+                    print("Wykonuję metodę Gaussa-Seidla dla osiągnięcia dokładnosci", accurancy)
                     chosen_matrix,vector=choose_function(letter)
                     gauss_seidel_accurancy(chosen_matrix,vector,accurancy)
                     test2 = False
