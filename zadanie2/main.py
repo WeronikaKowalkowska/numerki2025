@@ -1,6 +1,6 @@
 import numpy as np
 
-from funkcje import choose_function, gauss_seidel_iterations, matrix_a, matrix_b, matrix_c, matrix_d, matrix_e, \
+from funkcje import choose_function, gauss_seidel_iterations, gauss_seidel_accurancy, matrix_a, matrix_b, matrix_c, matrix_d, matrix_e, \
     matrix_f, matrix_g, matrix_h, matrix_i, matrix_j, have_solution, show_matrix
 
 #W metodach iteracyjnych przed przystapieniem do obliczeń należy sprawdzać czy podana macierz spelnia warunki zbieżności.
@@ -9,10 +9,6 @@ from funkcje import choose_function, gauss_seidel_iterations, matrix_a, matrix_b
 
 #MENU
 continueProgram=True
-
-
-def gauss_seidel_accurancy(chosen_matrix, vector, accurancy):
-    pass
 
 
 while continueProgram:
@@ -62,9 +58,13 @@ while continueProgram:
         if 97 <= ord(letter) <= 107:
             test = False
         elif ord(letter)==108:
-            continueProgram=False
+            continueProgram = False
+            test = False
         else:
             print("Niepoprawny wybór macierzy. Wybierz ponownie: ")
+
+    if not continueProgram:
+        break
 
     # test = True
     # while test:
@@ -80,25 +80,24 @@ while continueProgram:
         if cryterium == "a":
             test2=True
             while test2:
-                iterations=input("Podaj liczbę iteracji do wykonania:")
-                if iterations.isdigit():
+                iterations=int(input("Podaj liczbę iteracji do wykonania: "))
+                if iterations > 0:
                     print("Wykonuję metodę Gaussa-Seidla dla", iterations, "iteracji: ")
                     chosen_matrix, vector = choose_function(letter)
-                    gauss_seidel_iterations(chosen_matrix, vector, iterations)
-                    test2=False
+                    solution = gauss_seidel_iterations(chosen_matrix, vector, iterations)
+                    print("Rozwiązanie: ", solution)
+                    test2 = False
                 else:
-                    print("Wprowadzona wartość jest niepoprawna. Spróbuj ponownie: ")
-
-
-            test = False
-        if cryterium == "b":
+                    print("Wprowadzona wartość jest niepoprawna. Spróbuj ponownie. ")
+        elif cryterium == "b":
             test2 = True
             while test2:
-                accurancy = input("Podaj dokładność wyniku:")
-                if accurancy.isdigit():
+                accurancy = float(input("Podaj dokładność wyniku: "))
+                if accurancy > 0:
                     print("Wykonuję metodę Gaussa-Seidla dla osiągnięcia dokładnosci", accurancy)
                     chosen_matrix,vector=choose_function(letter)
-                    gauss_seidel_accurancy(chosen_matrix,vector,accurancy)
+                    solution = gauss_seidel_accurancy(chosen_matrix, vector, accurancy)
+                    print("Rozwiązanie: ", solution)
                     test2 = False
                 else:
                     print("Wprowadzona wartość jest niepoprawna. Spróbuj ponownie: ")

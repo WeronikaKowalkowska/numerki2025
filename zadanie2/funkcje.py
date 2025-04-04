@@ -60,33 +60,61 @@ def choose_function(literka):
     if literka == 'j':
         return np.array(matrix_j), [1.5, 0.8, 0.7]
 
-def gauss_seidel(matrix, vector,solution):
-
-    '''for i in range(0,len(matrix_a)-1):
-        solution[i]=
-    solution[0]=(1/matrix[0][0])*(vector[0]+solution[1]*matrix[0][1]+solution[2]*matrix[0][2])
-    for i in range(3):
-    for i in range(0,len(matrix_a[0])-1):
-        solution[i] = (1 / matrix[i][i]) * (vector[i] + solution[1] * matrix[i][1] + solution[2] * matrix[i][2])'''
-    for i in range(0, len(matrix_a[0]) - 1):
-        expression=0
-        for j in range(0, len(matrix_a) - 1):
-            expression=expression + solution[j] * matrix[i][j]
-        solution[i] = (1 / matrix[i][i]) * (vector[i]+expression)
+def gauss_seidel(matrix, vector, solution):
+    # for i in range(0, len(matrix_a[0]) - 1):
+    #     expression=0
+    #     for j in range(0, len(matrix_a) - 1):
+    #         expression=expression + solution[j] * matrix[i][j]
+    #     solution[i] = (1 / matrix[i][i]) * (vector[i]+expression)
 
     return solution
 
 def gauss_seidel_iterations(matrix, vector, iterations):
-    solution = np.zeros_like(vector) #wynik początkowo to zerowy wektor
-    for i in range(0,iterations):
-        solution = gauss_seidel(matrix, vector, solution)
+    solution = [1, 1, 1, 1] #wynik początkowo to zerowy wektor
+    last_iter_solution = [1, 1, 1, 1] #wyniki dla poprzedniej iteracji
+
+    for iter in range(iterations):  #iter - bierząca iteracja
+        for i in range(matrix.shape[0]): #przechodzimy po wierszach
+            a_ii = matrix[i, i]
+            last_sum = 0
+            now_sum = 0
+            for j in range(matrix.shape[1]): #przechodzimy po kolumnach
+                if j < i: #podstawiamy to co obliczono w poprzedniej iteracji
+                    last_sum += matrix[i, j] * last_iter_solution[j]
+                elif j > i:
+                    now_sum += matrix[i, j] * solution[j]
+
+            last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
+
+        for k in range(len(solution)):
+            solution[k] = last_iter_solution[k]      #zapisanie poprzedniogo rozwiązania
+    # for i in range(0, iterations):
+    #     solution = gauss_seidel(matrix, vector, solution)
     return solution
 
+def gauss_seidel_iterations2(matrix, vector, iterations):
+    solution = [1, 1, 1, 1]  # punkt startowy
 
-# def gauss_seidel_accurancy(matrix, vector, accurancy):
-#     solution = []
-#     while for i in range len(matrix): abs(solution[i]-solution[i+1])<accurancy:
-#         solution = gauss_seidel(matrix, vector, solution)
-#     return solution
+    for iter in range(iterations):  # bieżąca iteracja
+        for i in range(matrix.shape[0]):  # przechodzimy po wierszach
+            a_ii = matrix[i, i]
+            last_sum = 0
+            now_sum = 0
+            for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
+                if j < i:  # już zaktualizowane w tej iteracji
+                    last_sum += matrix[i, j] * solution[j]
+                elif j > i:  # jeszcze nie zaktualizowane
+                    now_sum += matrix[i, j] * solution[j]
+
+            solution[i] = (vector[i] - now_sum - last_sum) / a_ii  # <-- TU aktualizujemy od razu!
+
+    return solution
+
+def gauss_seidel_accurancy(matrix, vector, accurancy):
+    solution = np.zeros_like(vector)
+    # while for i in range len(matrix):
+    #     abs(solution[i]-solution[i+1])<accurancy:
+    #     solution = gauss_seidel(matrix, vector, solution)
+    return solution
 
 # def verify_integrity(matrix,vector):
