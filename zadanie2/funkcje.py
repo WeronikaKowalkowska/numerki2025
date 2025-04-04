@@ -3,13 +3,13 @@ import numpy as np
 matrix_a=([3,3,1],[2,5,7],[1,2,1])
 matrix_b=([3,3,1],[2,5,7],[-4,-10,-14])
 matrix_c=([3,3,1],[2,5,7],[-4,-10,-14])
-matrix_d=([0.5,-0.0625,0.1875,0.0625],[-0.0625,0.5,0,0],[0.1875,0,0.375,0.125],[0.0625,0,0.125,0.25])
+matrix_d=([0.5,-0.0625,0.1875,0.0625],[-0.0625,0.5,0,0],[0.1875,0,0.375,0.125],[0.0625,0,0.125,0.25]) #spełnia warunku przekątniowej dominacji wierszowej
 matrix_e=([3,2,1,-1],[5,-1,1,2],[1,-1,1,2],[7,8,1,-7])
 matrix_f=([3,-1,2,-1],[3,-1,1,1],[1,2,-1,2],[-1,1,-2,-3])
 matrix_g=([0,0,1],[1,0,0],[0,1,0])
 matrix_h=([10,-5,1],[4,-7,2],[5,1,4])
 matrix_i=([6,-4,2],[-5,5,2],[0.9,0.9,3.6])
-matrix_j=([1,0.2,0.3],[0.1,1,-0.3],[-0.1,-0.2,1])
+matrix_j=([1,0.2,0.3],[0.1,1,-0.3],[-0.1,-0.2,1]) #spełnia warunku przekątniowej dominacji wierszowej
 
 #A to macierz współczynników, a b - wektor wyrazów wolnych
 def show_matrix(A, b):
@@ -30,13 +30,6 @@ def have_solution(A):
         if a_ii <= suma:     #żeby było rozwiązanie to musi być a_ii > sum
          return False
     return True
-
-#funkcja realizująca schemat hornera
-def horner(argument, wspolczynniki):
-    wynik = wspolczynniki[0]
-    for i in range(1, len(wspolczynniki)):
-        wynik = wynik * argument + wspolczynniki[i]
-    return wynik
 
 def choose_function(literka):
     if literka == 'a':
@@ -59,40 +52,88 @@ def choose_function(literka):
         return np.array(matrix_i), [4, 11, 13.5]
     if literka == 'j':
         return np.array(matrix_j), [1.5, 0.8, 0.7]
+    if literka == 'k':
+        matrix = []
+        vector = []
+        test=True
+        while test:
+            wybor = input("Wybierz jaki plik chcesz wczytać: a) example.csv  b) example2.txt").lower()
+            if wybor == "a":
+                file = open("./files/example.csv")
+                for line in file:
+                    for char in line:
+                        if len(line) == 1:
+                            vector.append(int(char))
+                        else:
+                            matrix[line][char]=int(char)
+                print("Wczytano: ")
+                show_matrix(matrix, vector)
+                test=False
+            elif wybor == "b":
+                file = open("./files/example2.txt")
+                for line in file:
+                    for char in line:
+                        if len(line) == 1:
+                            vector.append(int(char))
+                        else:
+                            matrix[line][char]=matrix.append(char)
+                print("Wczytano: ")
+                show_matrix(matrix, vector)
+                test=False
+            else:
+                print("Niepoprawny wybór macierzy :( . Wybierz ponownie: ")
+        return matrix, vector
 
-def gauss_seidel(matrix, vector, solution):
-    # for i in range(0, len(matrix_a[0]) - 1):
-    #     expression=0
-    #     for j in range(0, len(matrix_a) - 1):
-    #         expression=expression + solution[j] * matrix[i][j]
-    #     solution[i] = (1 / matrix[i][i]) * (vector[i]+expression)
 
-    return solution
+def gauss_seidel(matrix, last_iter_solution, solution, vector):
+    for i in range(matrix.shape[0]):  # przechodzimy po wierszach
+        a_ii = matrix[i, i]
+        last_sum = 0
+        now_sum = 0
+        for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
+            if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
+                last_sum += matrix[i, j] * last_iter_solution[j]
+            elif j > i:
+                now_sum += matrix[i, j] * solution[j]
+
+        last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
+
+    for k in range(len(solution)):
+        solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
+
+    return solution, last_iter_solution
 
 def gauss_seidel_iterations(matrix, vector, iterations):
-    solution = [1, 1, 1, 1] #wynik początkowo to zerowy wektor
-    last_iter_solution = [1, 1, 1, 1] #wyniki dla poprzedniej iteracji
+    solution = np.zeros(len(matrix))
+    last_iter_solution = np.zeros(len(matrix))
 
-    for iter in range(iterations):  #iter - bierząca iteracja
-        for i in range(matrix.shape[0]): #przechodzimy po wierszach
-            a_ii = matrix[i, i]
-            last_sum = 0
-            now_sum = 0
-            for j in range(matrix.shape[1]): #przechodzimy po kolumnach
-                if j < i: #podstawiamy to co obliczono w poprzedniej iteracji
-                    last_sum += matrix[i, j] * last_iter_solution[j]
-                elif j > i:
-                    now_sum += matrix[i, j] * solution[j]
-
-            last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
-
-        for k in range(len(solution)):
-            solution[k] = last_iter_solution[k]      #zapisanie poprzedniogo rozwiązania
-    # for i in range(0, iterations):
-    #     solution = gauss_seidel(matrix, vector, solution)
+    for iter in range(int(iterations)):  #iter - bierząca iteracja
+        solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
     return solution
 
-def gauss_seidel_iterations2(matrix, vector, iterations):
+def gauss_seidel_accurancy(matrix, vector, accurancy):
+    solution = np.zeros(len(matrix))
+    last_iter_solution = np.zeros(len(matrix))
+
+    while not check_accurancy(solution, last_iter_solution, accurancy):
+        solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
+    return solution
+
+def check_accurancy(solution, last_iter_solution, epsilon):
+    new_solution = []
+
+    for i in range(len(solution)):
+        new_solution.append(abs(solution[i]-last_iter_solution[i]))
+    value=max(new_solution)
+
+    if value < (epsilon*max(solution)):
+        return True
+    else:
+        return False
+
+
+
+'''def gauss_seidel_iterations2(matrix, vector, iterations):
     solution = [1, 1, 1, 1]  # punkt startowy
 
     for iter in range(iterations):  # bieżąca iteracja
@@ -108,13 +149,4 @@ def gauss_seidel_iterations2(matrix, vector, iterations):
 
             solution[i] = (vector[i] - now_sum - last_sum) / a_ii  # <-- TU aktualizujemy od razu!
 
-    return solution
-
-def gauss_seidel_accurancy(matrix, vector, accurancy):
-    solution = np.zeros_like(vector)
-    # while for i in range len(matrix):
-    #     abs(solution[i]-solution[i+1])<accurancy:
-    #     solution = gauss_seidel(matrix, vector, solution)
-    return solution
-
-# def verify_integrity(matrix,vector):
+    return solution'''
