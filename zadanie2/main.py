@@ -76,7 +76,7 @@ while continueProgram:
             test = False
             time.sleep(3)
         else:
-            cryterium= input("Wybierz kryterium stopu: a) liczba iteracji   b) osiągnięcie dokładności wyniku ").lower()
+            cryterium= input("Wybierz kryterium stopu: a) liczba iteracji   b) osiągnięcie dokładności wyniku   ").lower()
             if cryterium == "a":
                 test2=True
                 while test2:

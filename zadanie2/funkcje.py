@@ -59,30 +59,34 @@ def choose_function(literka):
         while test:
             wybor = input("Wybierz jaki plik chcesz wczytać: a) example.csv  b) example2.txt").lower()
             if wybor == "a":
-                file = open("./files/example.csv")
-                for line in file:
-                    for char in line:
-                        if len(line) == 1:
-                            vector.append(int(char))
-                        else:
-                            matrix[line][char]=int(char)
+                matrix, vector = read_matrix_from_file("./files/example.csv")
                 print("Wczytano: ")
                 show_matrix(matrix, vector)
                 test=False
             elif wybor == "b":
-                file = open("./files/example2.txt")
-                for line in file:
-                    for char in line:
-                        if len(line) == 1:
-                            vector.append(int(char))
-                        else:
-                            matrix[line][char]=matrix.append(char)
+                matrix, vector = read_matrix_from_file("./files/example2.txt")
                 print("Wczytano: ")
                 show_matrix(matrix, vector)
                 test=False
             else:
                 print("Niepoprawny wybór macierzy :( . Wybierz ponownie: ")
         return matrix, vector
+
+def read_matrix_from_file(filename):
+    matrix = []
+    vector = []
+
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+
+    for line in lines:
+        values = list(map(int, line.strip().split(';')))
+        if len(values) > 1:
+            matrix.append(values)
+        else:
+            vector.append(values[0])
+
+    return np.array(matrix), np.array(vector)
 
 
 def gauss_seidel(matrix, last_iter_solution, solution, vector):
