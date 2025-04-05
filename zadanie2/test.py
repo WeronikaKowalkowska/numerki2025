@@ -133,7 +133,7 @@ def read_matrix_from_file(filename):
         else:
             vector.append(values[0])
 
-    return np.array(matrix), vector
+    return matrix, vector
 
 matrix, vector = read_matrix_from_file("files/example2.txt")
 matrix2, vector2 = read_matrix_from_file("files/example.csv")

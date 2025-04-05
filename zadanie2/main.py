@@ -50,18 +50,19 @@ while continueProgram:
     print("k)")
     print("wczytaj macierz z pliku")
     print("l)")
+    print("wprowadź ręcznie liczbę równań i ich współczynniki")
+    print("m)")
     print("zakończ program :(")
 
     test = True
     letter = ""
     while test:
         letter = input("Wybrano: ").lower()
-        if 97 <= ord(letter) <= 107:
+        if 97 <= ord(letter) <= 108:
             test = False
-        elif ord(letter)==108:
+        elif ord(letter)==109:
             continueProgram = False
             test = False
-            #break
         else:
             print("Niepoprawny wybór macierzy :( . Wybierz ponownie: ")
 
@@ -72,7 +73,7 @@ while continueProgram:
     while test:
         chosen_matrix, vector = choose_function(letter)
         if have_solution(chosen_matrix) is False:
-            print("Wybrana macierz nie spełnia warunku przekątniowej dominacji wierszowej, zatem może nie mieć rozwiązania. Wybierz inną macierz.")
+            print("Wybrana macierz nie spełnia warunku przekątniowej dominacji wierszowej, zatem może nie mieć rozwiązania. Spróbuj zmienić kolejność równań lub wybierz inną macierz.")
             test = False
             time.sleep(3)
         else:
@@ -83,7 +84,6 @@ while continueProgram:
                     iterations=input("Podaj liczbę iteracji do wykonania: ")
                     if iterations.isdigit():
                         print("Wykonuję metodę Gaussa-Seidla dla", iterations, "iteracji: ")
-                        chosen_matrix, vector = choose_function(letter)
                         solution = gauss_seidel_iterations(chosen_matrix, vector, iterations)
                         formatted_solution = [str(x).replace('.', ',') for x in solution]
                         print("Rozwiązanie:", '; '.join(formatted_solution))
@@ -98,8 +98,8 @@ while continueProgram:
                     accurancy = float(input("Podaj dokładność wyniku: "))
                     if accurancy > 0:
                         print("Wykonuję metodę Gaussa-Seidla dla osiągnięcia dokładnosci", accurancy)
-                        chosen_matrix,vector=choose_function(letter)
-                        solution = gauss_seidel_accurancy(chosen_matrix, vector, accurancy)
+                        #solution = gauss_seidel_accurancy(chosen_matrix, vector, accurancy)
+                        solution=gauss_seidel_with_accuracy(chosen_matrix, vector, accurancy, max_iterations=1000)
                         formatted_solution = [str(x).replace('.', ',') for x in solution]
                         print("Rozwiązanie:", '; '.join(formatted_solution))
                         test2 = False
