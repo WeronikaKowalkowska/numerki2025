@@ -129,37 +129,24 @@ def read_matrix_from_file(filename):
 
     return np.array(matrix), np.array(vector)
 
+def gauss_seidel(matrix, last_iter_solution, solution, vector):
+    for i in range(matrix.shape[0]):  # przechodzimy po wierszach
+        a_ii = matrix[i, i]
+        last_sum = 0
+        now_sum = 0
+        for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
+            if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
+                last_sum += matrix[i, j] * last_iter_solution[j]
+            elif j > i:
+                now_sum += matrix[i, j] * solution[j]
 
-# def gauss_seidel(matrix, last_iter_solution, solution, vector):
-#     for i in range(matrix.shape[0]):  # przechodzimy po wierszach
-#         a_ii = matrix[i, i]
-#         last_sum = 0
-#         now_sum = 0
-#         for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
-#             if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
-#                 last_sum += matrix[i, j] * last_iter_solution[j]
-#             elif j > i:
-#                 now_sum += matrix[i, j] * solution[j]
-#
-#         last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
-#
-#     for k in range(len(solution)):
-#         solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
-#
-#     return solution, last_iter_solution
-#
-# '''def gauss_seidel2(matrix, last_iter_solution, solution, vector):
-#     n = len(solution)
-#     new_solution = solution.copy()
-#     for i in range(n):
-#         sum_val = 0
-#         for j in range(n):
-#             if j != i:
-#                 # Use new_solution (updated values) for j < i
-#                 sum_val += matrix[i, j] * new_solution[j]
-#         new_solution[i] = (vector[i] - sum_val) / matrix[i, i]
-#     return new_solution, last_iter_solution'''
-#
+        last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
+
+    for k in range(len(solution)):
+        solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
+
+    return solution, last_iter_solution
+
 def gauss_seidel_iterations(matrix, vector, iterations):
     solution = np.zeros(len(matrix))
     last_iter_solution = np.zeros(len(matrix))
@@ -167,98 +154,43 @@ def gauss_seidel_iterations(matrix, vector, iterations):
     for iter in range(int(iterations)):  #iter - bierząca iteracja
         solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
     return solution
-#
-# def gauss_seidel_accurancy(matrix, vector, accurancy):
-#     solution = np.zeros(len(matrix))
-#     last_iter_solution = np.zeros(len(matrix))
-#
-#     while not check_accurancy(solution, last_iter_solution, accurancy):
-#         solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
-#     return solution
-#
-# '''def check_accurancy2(solution, last_iter_solution, epsilon):
-#     max_diff = max(abs(solution[i] - last_iter_solution[i]) for i in range(len(solution)))
-#     max_sol = max(abs(x) for x in solution)
-#     return max_diff < epsilon * max_sol if max_sol != 0 else max_diff < epsilon'''
-#
-# def check_accurancy(solution, last_iter_solution, epsilon):
-#     new_solution = []
-#
-#     for i in range(len(solution)):
-#         new_solution.append(abs(solution[i]-last_iter_solution[i]))
-#     value=max(new_solution)
-#
-#     if value < (epsilon*max(solution)):
-#         return True
-#     else:
-#         return False
-#
-# '''def gauss_seidel_iterations2(matrix, vector, iterations):
-#     solution = [1, 1, 1, 1]  # punkt startowy
-#
-#     for iter in range(iterations):  # bieżąca iteracja
-#         for i in range(matrix.shape[0]):  # przechodzimy po wierszach
-#             a_ii = matrix[i, i]
-#             last_sum = 0
-#             now_sum = 0
-#             for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
-#                 if j < i:  # już zaktualizowane w tej iteracji
-#                     last_sum += matrix[i, j] * solution[j]
-#                 elif j > i:  # jeszcze nie zaktualizowane
-#                     now_sum += matrix[i, j] * solution[j]
-#
-#             solution[i] = (vector[i] - now_sum - last_sum) / a_ii  # <-- TU aktualizujemy od razu!
-#
-#     return solution'''
 
-# def gauss_seidel(matrix, old_solution, vector):
-#     """
-#     Oblicza nowe przybliżenie rozwiązania metodą Gaussa-Seidla.
-#     old_solution – poprzednie przybliżenie,
-#     vector – wektor wyrazów wolnych.
-#     """
-#     new_solution = np.copy(old_solution)
-#     n = matrix.shape[0]
-#     for i in range(n):
-#         # Obliczamy sumę dla elementów przed przekątną: wykorzystujemy już zaktualizowane wartości
-#         sum_before = np.dot(matrix[i, :i], new_solution[:i])
-#         # Obliczamy sumę dla elementów po przekątnej: korzystamy z poprzedniego przybliżenia
-#         sum_after = np.dot(matrix[i, i + 1:], old_solution[i + 1:])
-#         new_solution[i] = (vector[i] - sum_before - sum_after) / matrix[i, i]
-#     return new_solution
+#jeśli rozwiązanie jest bliskie zeru – stosujemy kryterium absolutne.
+def check_accuracy(solution, last_iter_solution, epsilon):
 
+    max_diff = 0.0           #największa różnica między kolejnymi wartościami
+    max_solution = 0.0       #największa wartość absolutna w nowym rozwiązaniu
 
-def check_accuracy(new_solution, old_solution, tol):
-    """
-    Sprawdza, czy zbieżność jest osiągnięta.
-    Używamy normy infinity, by ocenić maksymalną zmianę między kolejnymi iteracjami.
-    Przykładowo, możemy zastosować kryterium względne, zabezpieczając przypadek,
-    gdy maksimum new_solution jest zerowe.
-    """
-    diff = np.abs(new_solution - old_solution)
-    max_diff = np.max(diff)
+    #przeglądaj elementy rozwiązania i oblicz największą zmianę i wartość
+    for i in range(len(solution)):
+        diff = abs(solution[i] - last_iter_solution[i])  #różnica między iteracjami
+        if diff > max_diff:
+            max_diff = diff                              #zapisz największą napotkaną różnicę
 
-    # Jeśli nowe przybliżenie jest bliskie zeru, stosuj kryterium absolutne.
-    if np.max(np.abs(new_solution)) == 0:
-        return max_diff < tol
-    else:
-        relative_error = max_diff / np.max(np.abs(new_solution))
-        return relative_error < tol
+        val = abs(solution[i])                           #wartość bezwzględna nowego rozwiązania
+        if val > max_solution:
+            max_solution = val                           #zapisz największą wartość rozwiązania
 
+    #jeśli max_solution = 0 (wszystko bliskie zeru), użyj kryterium absolutnego
+    if max_solution == 0:
+        return max_diff < epsilon
 
-def gauss_seidel_with_accuracy(matrix, vector, tol, max_iterations=1000):
-    """
-    Wykonuje iteracje Gaussa-Seidla do momentu osiągnięcia zadanej dokładności tol.
-    max_iterations – zabezpieczenie przed nieskończoną pętlą.
-    """
-    solution = np.zeros(len(vector))
+    #w przeciwnym razie – stosuj kryterium względne
+    relative_error = max_diff / max_solution
+    return relative_error < epsilon
+
+def gauss_seidel_accuracy(matrix, vector, tol):
+    solution = np.zeros(len(matrix))
+    last_iter_solution = np.zeros(len(matrix))
+
+    test = True
     iteration = 0
 
-    while iteration < max_iterations:
-        new_solution = gauss_seidel(matrix, solution, vector)
-        # Sprawdzamy czy kryterium zbieżności jest spełnione
-        if check_accuracy(new_solution, solution, tol):
-            break
-        solution = new_solution
+    while test:
+        solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
+        #sprawdzamy czy kryterium zbieżności jest spełnione
+        if check_accuracy(solution, last_iter_solution, tol):
+            test = False
+        last_iter_solution = solution
         iteration += 1
-    return new_solution
+    return solution, iteration

@@ -98,10 +98,9 @@ while continueProgram:
                     accurancy = float(input("Podaj dokładność wyniku: "))
                     if accurancy > 0:
                         print("Wykonuję metodę Gaussa-Seidla dla osiągnięcia dokładnosci", accurancy)
-                        #solution = gauss_seidel_accurancy(chosen_matrix, vector, accurancy)
-                        solution=gauss_seidel_with_accuracy(chosen_matrix, vector, accurancy, max_iterations=1000)
+                        solution, iteration_count =gauss_seidel_accuracy(chosen_matrix, vector, accurancy)
                         formatted_solution = [str(x).replace('.', ',') for x in solution]
-                        print("Rozwiązanie:", '; '.join(formatted_solution))
+                        print("Rozwiązanie:", '; '.join(formatted_solution), "(znalezione za", iteration_count, "iteracji)")
                         test2 = False
                     else:
                         print("Wprowadzona wartość jest niepoprawna. :( Spróbuj ponownie:")
