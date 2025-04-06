@@ -31,6 +31,9 @@ def have_solution(A):
          return False
     return True
 
+#def check_matrix_properties():
+
+
 def choose_function(literka):
     if literka == 'a':
         return np.array(matrix_a), [12,33,8]
@@ -129,30 +132,43 @@ def read_matrix_from_file(filename):
 
     return np.array(matrix), np.array(vector)
 
-def gauss_seidel(matrix, last_iter_solution, solution, vector):
-    for i in range(matrix.shape[0]):  # przechodzimy po wierszach
+# def gauss_seidel(matrix, last_iter_solution, solution, vector):
+#     for i in range(matrix.shape[0]):  # przechodzimy po wierszach
+#         a_ii = matrix[i, i]
+#         last_sum = 0
+#         now_sum = 0
+#         for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
+#             if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
+#                 last_sum += matrix[i, j] * last_iter_solution[j]
+#             elif j > i:
+#                 now_sum += matrix[i, j] * solution[j]
+#
+#         last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
+#
+#     for k in range(len(solution)):
+#         solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
+#
+#     return solution, last_iter_solution
+def gauss_seidel(matrix, last_iter_solution, vector):
+    new_solution = last_iter_solution.copy()
+
+    for i in range(matrix.shape[0]):
         a_ii = matrix[i, i]
-        last_sum = 0
-        now_sum = 0
-        for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
-            if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
-                last_sum += matrix[i, j] * last_iter_solution[j]
-            elif j > i:
-                now_sum += matrix[i, j] * solution[j]
+        sum1 = sum(matrix[i, j] * new_solution[j] for j in range(i))  # już zaktualizowane
+        sum2 = sum(matrix[i, j] * last_iter_solution[j] for j in range(i + 1, matrix.shape[1]))  # jeszcze nie zaktualizowane
 
-        last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
+        new_solution[i] = (vector[i] - sum1 - sum2) / a_ii
 
-    for k in range(len(solution)):
-        solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
+    return new_solution
 
-    return solution, last_iter_solution
 
 def gauss_seidel_iterations(matrix, vector, iterations):
     solution = np.zeros(len(matrix))
     last_iter_solution = np.zeros(len(matrix))
 
     for iter in range(int(iterations)):  #iter - bierząca iteracja
-        solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
+        solution = gauss_seidel(matrix, last_iter_solution, vector)
+        last_iter_solution = solution.copy()
     return solution
 
 #jeśli rozwiązanie jest bliskie zeru – stosujemy kryterium absolutne.
@@ -180,17 +196,18 @@ def check_accuracy(solution, last_iter_solution, epsilon):
     return relative_error < epsilon
 
 def gauss_seidel_accuracy(matrix, vector, tol):
-    solution = np.zeros(len(matrix))
-    last_iter_solution = np.zeros(len(matrix))
+    #solution = np.zeros(len(matrix))
+    last_solution = np.zeros(len(matrix))
 
-    test = True
     iteration = 0
+    while True:
+        new_solution = gauss_seidel(matrix, last_solution, vector)
 
-    while test:
-        solution, last_iter_solution = gauss_seidel(matrix, last_iter_solution, solution, vector)
-        #sprawdzamy czy kryterium zbieżności jest spełnione
-        if check_accuracy(solution, last_iter_solution, tol):
-            test = False
-        last_iter_solution = solution
+        if check_accuracy(new_solution, last_solution, tol):
+            break
+
+        last_solution = new_solution.copy()
         iteration += 1
-    return solution, iteration
+
+    return new_solution, iteration
+
