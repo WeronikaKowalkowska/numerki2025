@@ -72,8 +72,8 @@ while continueProgram:
     test = True
     while test:
         chosen_matrix, vector = choose_function(letter)
-        if have_solution(chosen_matrix) is False:
-            print("Wybrana macierz nie spełnia warunku przekątniowej dominacji wierszowej, zatem może nie mieć rozwiązania. Spróbuj zmienić kolejność równań lub wybierz inną macierz.")
+        if has_solution(chosen_matrix) is False:
+            print("Spróbuj zmienić kolejność równań lub wybierz inną macierz.")
             test = False
             time.sleep(3)
         else:

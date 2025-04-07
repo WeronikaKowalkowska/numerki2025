@@ -17,8 +17,8 @@ def show_matrix(A, b):
         row = ["{}*x{}".format(A[i, j], j + 1) for j in range(A.shape[1])]
         print(" + ".join(row), "=", b[i])
 
-#czy jest spełniony warunek zbieżności metody dla macierzy A
-def have_solution(A):
+#czy jest diagonalnie dominująca
+def is_matrix_diagonally_dominant(A):
     suma = 0     #suma wartości i-go wiersza
     a_ii = 0    #wartość na przekątnej i-go wiersza
     for i in range(len(A)):
@@ -31,7 +31,37 @@ def have_solution(A):
          return False
     return True
 
-#def check_matrix_properties():
+#sprawdzenie czy macierz jest nieosobliwa - czy wyznacznik jest różny od zera
+def is_matrix_non_singular(A):
+    det = np.linalg.det(A)
+    if det == 0:
+        return False
+    return True
+
+# #sprawdzenie czy macierz jest nieredukowalna, czyli czy nie można jej sprowadzić do postaci blokowej górnej trójkątnej
+# #dla macierzy kwadratowych - https://www.mathworks.com/help/econ/dtmc.isreducible.html#d126e350201
+# # https://medium.com/@ianchau379/asked-grok-3-how-to-verify-a-stochastic-matrix-is-irreducible-a16f3cded4fc
+# def is_matrix_irreducible(A):
+#     n = A.shape[0]
+#     I = np.eye(n)  #macierz jednostkowa
+#
+#     M = I + A   #traktowane są również przejścia do tego samego stanu (pętla)
+#     M_power = np.linalg.matrix_power(M, n - 1) #sprawdzenie, czy w maksymalnie n-1 krokach da się przejść z każdego stanu do każdego innego
+#     #jeśli którakolwiek wartość w wyniku potęgowania jest 0, oznacza to brak łączności → macierz jest redukowalna
+#
+#     return np.all(M_power > 0)
+
+#czy rozwiązanie metodą Gaussa-Seidela macieży A jest zbieżne
+def has_solution(A):
+    if not is_matrix_non_singular(A):
+        print("Macierz jest osobliwa, metoda Gaussa-Seidela nie jest zbieżna.")
+        return False
+
+    if not is_matrix_diagonally_dominant(A):
+        print("Macierz nie jest diagonalnie dominująca, metoda Gaussa-Seidela może nie być zbieżna.")
+        return False
+    #chat pisze, że "Nieredukowalność jest istotna w kontekście analizy macierzy przejścia w procesach Markowa lub w innych specyficznych przypadkach, ale nie jest bezpośrednio związana ze zbieżnością metody Gaussa-Seidela."
+    return True
 
 
 def choose_function(literka):
@@ -132,27 +162,10 @@ def read_matrix_from_file(filename):
 
     return np.array(matrix), np.array(vector)
 
-# def gauss_seidel(matrix, last_iter_solution, solution, vector):
-#     for i in range(matrix.shape[0]):  # przechodzimy po wierszach
-#         a_ii = matrix[i, i]
-#         last_sum = 0
-#         now_sum = 0
-#         for j in range(matrix.shape[1]):  # przechodzimy po kolumnach
-#             if j < i:  # podstawiamy to co obliczono w poprzedniej iteracji
-#                 last_sum += matrix[i, j] * last_iter_solution[j]
-#             elif j > i:
-#                 now_sum += matrix[i, j] * solution[j]
-#
-#         last_iter_solution[i] = (vector[i] - now_sum - last_sum) / a_ii
-#
-#     for k in range(len(solution)):
-#         solution[k] = last_iter_solution[k]  # zapisanie poprzedniogo rozwiązania
-#
-#     return solution, last_iter_solution
 def gauss_seidel(matrix, last_iter_solution, vector):
     new_solution = last_iter_solution.copy()
 
-    for i in range(matrix.shape[0]):
+    for i in range(matrix.shape[0]):    #przechodzimy po wierszach
         a_ii = matrix[i, i]
         sum1 = sum(matrix[i, j] * new_solution[j] for j in range(i))  # już zaktualizowane
         sum2 = sum(matrix[i, j] * last_iter_solution[j] for j in range(i + 1, matrix.shape[1]))  # jeszcze nie zaktualizowane
@@ -160,7 +173,6 @@ def gauss_seidel(matrix, last_iter_solution, vector):
         new_solution[i] = (vector[i] - sum1 - sum2) / a_ii
 
     return new_solution
-
 
 def gauss_seidel_iterations(matrix, vector, iterations):
     solution = np.zeros(len(matrix))
@@ -171,7 +183,7 @@ def gauss_seidel_iterations(matrix, vector, iterations):
         last_iter_solution = solution.copy()
     return solution
 
-#jeśli rozwiązanie jest bliskie zeru – stosujemy kryterium absolutne.
+#jeśli rozwiązanie jest bliskie zeru – stosujemy kryterium absolutne
 def check_accuracy(solution, last_iter_solution, epsilon):
 
     max_diff = 0.0           #największa różnica między kolejnymi wartościami
@@ -196,7 +208,6 @@ def check_accuracy(solution, last_iter_solution, epsilon):
     return relative_error < epsilon
 
 def gauss_seidel_accuracy(matrix, vector, tol):
-    #solution = np.zeros(len(matrix))
     last_solution = np.zeros(len(matrix))
 
     iteration = 0
@@ -210,4 +221,3 @@ def gauss_seidel_accuracy(matrix, vector, tol):
         iteration += 1
 
     return new_solution, iteration
-

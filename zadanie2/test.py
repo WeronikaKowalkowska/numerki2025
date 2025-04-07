@@ -1,6 +1,6 @@
 # from tkinter.scrolledtext import example
 #
-# import numpy as np
+import numpy as np
 #
 # # Definicje macierzy
 # matrix_a = ([3, 3, 1], [2, 5, 7], [1, 2, 1])
@@ -118,26 +118,3 @@
 #     sol_acc = gauss_seidel_accuracy(A, b, acc)
 #     print(f"Rozwiązanie z dokładnością {acc}:", sol_acc)
 
-
-def read_matrix_from_file(filename):
-    matrix = []
-    vector = []
-
-    with open(filename, 'r') as file:
-        lines = file.readlines()
-
-    for line in lines:
-        values = list(map(int, line.strip().split(';')))
-        if len(values) > 1:
-            matrix.append(values)
-        else:
-            vector.append(values[0])
-
-    return matrix, vector
-
-matrix, vector = read_matrix_from_file("files/example2.txt")
-matrix2, vector2 = read_matrix_from_file("files/example.csv")
-
-print(matrix2)
-print()
-print(vector2)
