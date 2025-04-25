@@ -1,0 +1,1 @@
+# wariant 2 - interpolacja Lagrange'a dla nierównych odstępów argumentu
