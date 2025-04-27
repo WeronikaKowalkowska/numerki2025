@@ -30,7 +30,7 @@ def wyswietl_wykres(x, y):
     plt.grid()
     plt.axhline(0, color='black', linewidth=0.8)
     plt.axvline(0, color='black', linewidth=0.8)
-    plt.show()
+    return plt
 
 def wyswietl_wykres_koncowy(x, y, punkty_x, punkty_y):
     plt.plot(x, y, color='pink')
@@ -42,7 +42,7 @@ def wyswietl_wykres_koncowy(x, y, punkty_x, punkty_y):
     plt.grid()
     plt.axhline(0, color='black', linewidth=0.8)
     plt.axvline(0, color='black', linewidth=0.8)
-    plt.show()
+    return plt
 
 def wybor_funkcji(literka):
     if literka == 'a':
@@ -94,7 +94,7 @@ funkcja = Funkcja(wybor_funkcji(literka), funkcja_wzor[literka])
 
 # 2)WYŚWIETLENIE WYBRANEJ FUNKCJI
 x = np.linspace(-20, 20, 4000)  # zmienna służąca rozmieszczeniu punktów na osi OX wyświetlanych wykresów
-wyswietl_wykres(x, funkcja(x))
+wyswietl_wykres(x, funkcja(x)).show()
 
 rodzaj = input(
     "Wybierz rodzaj wczytania położenia węzłów interpolacyjnych:\na) wczytanie z pliku 'wezly.txt', b) wartości wylosowane, c) wartości wczytane z konsoli. (opcja domyślna to b): ")
@@ -203,7 +203,20 @@ for i in range(1, len(L)):
 print(L_koniec.wzor)
 print(L_koniec.funkcja(1))
 
+# 7) RYSOWANIE WYKRESU WIELOMIANU INTERPOLUJĄCEGO Z ZAZNACZENIEM WĘZŁÓW INTERPOLACJI
 x = np.linspace(x_1 - 1, x_2 + 1, 4000)
 
-# 7) RYSOWANIE WYKRESU WIELOMIANU INTERPOLUJĄCEGO Z ZAZNACZENIEM WĘZŁÓW INTERPOLACJI
-wyswietl_wykres_koncowy(x, L_koniec(x), wezly_x, wezly_y)
+x_min = np.min(x)
+x_max = np.max(x)
+y_min = min(np.min(funkcja(x)), np.min(L_koniec(x)))
+y_max = max(np.max(funkcja(x)), np.max(L_koniec(x)))
+
+plt = wyswietl_wykres_koncowy(x, L_koniec(x), wezly_x, wezly_y)
+plt.xlim(x_min, x_max)
+plt.ylim(y_min, y_max)
+plt.show()
+
+plt = wyswietl_wykres(x, funkcja(x))
+plt.xlim(x_min, x_max)
+plt.ylim(y_min, y_max)
+plt.show()
