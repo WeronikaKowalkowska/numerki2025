@@ -200,8 +200,17 @@ L_koniec = L[0]
 for i in range(1, len(L)):
     L_koniec = licz_funkcje(L[i], L_koniec)
 
-print(L_koniec.wzor)
-print(L_koniec.funkcja(1))
+print()
+print("Wzór funkcji interpolacyjnej: ", L_koniec.wzor)
+print ("Wartości funkcji w węzłach interpolacyjnych: ")
+for i in range(0, len(wezly_y)):
+    print(wezly_y[i])
+wezly_int_y = []
+for i in range(0, ile_wezlow):
+    wezly_int_y.append(L_koniec.funkcja(wezly_x[i]))
+print ("Wartości funkcji interpolacyjnej w węzłach interpolacyjnych: ")
+for i in range(0, len(wezly_int_y)):
+    print(wezly_int_y[i])
 
 # 7) RYSOWANIE WYKRESU WIELOMIANU INTERPOLUJĄCEGO Z ZAZNACZENIEM WĘZŁÓW INTERPOLACJI
 x = np.linspace(x_1 - 1, x_2 + 1, 4000)
