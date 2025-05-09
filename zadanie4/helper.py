@@ -9,7 +9,7 @@ def wybor_funkcji(literka):
         return lambda x: np.cos(x)
 
 def funkcja_waga(funkcja, x):
-    return lambda  x: funkcja(x) * np.sqrt(1/(1 - (x ** 2)))
+    return funkcja(x) * np.sqrt(1/(1 - (x ** 2)))
 
 def horner(argument, wspolczynniki):
     wynik = wspolczynniki[0]

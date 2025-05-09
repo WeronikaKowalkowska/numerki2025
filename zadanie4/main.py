@@ -11,6 +11,30 @@ Złożona kwadratura Newtona-Cotesa (wzór Simpsona):
 4. Mnożysz przez 1/3h i dodajesz błąd E.
 Kwadratura Gaussa-Czebyszewa:
 '''
+'''
+wagi i współrzędne  - z pliku na Wikampie
+n = 2
+  1.5707963267948966192  -0.7071067811865475244
+  1.5707963267948966192   0.7071067811865475244
+
+n = 3
+  1.0471975511965977462  -0.8660254037844386468
+  1.0471975511965977462   0.0000000000000000000
+  1.0471975511965977462   0.8660254037844386468
+
+n = 4
+  0.7853981633974483096  -0.9238795325112867561
+  0.7853981633974483096  -0.3826834323650897717
+  0.7853981633974483096   0.3826834323650897717
+  0.7853981633974483096   0.9238795325112867561
+
+n = 5
+  0.6283185307179586477  -0.9510565162951535721
+  0.6283185307179586477  -0.5877852522924731292
+  0.6283185307179586477   0.0000000000000000000
+  0.6283185307179586477   0.5877852522924731292
+  0.6283185307179586477   0.9510565162951535721
+'''
 
 from helper import *
 
@@ -25,7 +49,7 @@ while funkcja_literka_flaga:
     if funkcja_literka == "a" or funkcja_literka == "b" or funkcja_literka == "c":
         funkcja_literka_flaga = False
     else:
-        print("Wprowadź 'a', 'b' lub 'c'")
+        print("Wprowadź 'a', 'b' lub 'c'.")
 funkcja = wybor_funkcji(funkcja_literka)
 metoda = None
 metoda_flaga = True
@@ -35,12 +59,19 @@ while metoda_flaga:
     if metoda == "a" or metoda == "b":
         metoda_flaga = False
     else:
-        print("Wprowadź 'a' lub 'b'")
+        print("Wprowadź 'a' lub 'b'.")
 if metoda == "a":
-    epsilon = float(input("Podaj dokładność epsilon: "))
+    epsilon_flaga = True
+    epsilon = None
+    while epsilon_flaga:
+        epsilon = float(input("Podaj dokładność epsilon: "))
+        if epsilon > 0:
+            epsilon_flaga = False
+        else:
+            print("Wartość epsilon nia może być ujemna.")
     a = -1
     b = 1
-    wynik = None
+    wynik = 0
     wynik_poprzedni = None
     liczba_przedzialow = 2    # musi być parzysta, zwiększana, żeby osiągnąć lepszą dokładność
     dokladnosc_flaga = True
@@ -62,7 +93,37 @@ if metoda == "a":
             liczba_przedzialow *= 2
             wynik_poprzedni = wynik
 
+    print("-------Złożona kwadratura Newtona-Cotesa (wzór Simpsona)-------")
     print("Wynik całki:", wynik, "z", liczba_przedzialow, "podprzedziałami.")
 
 if metoda == "b":
-    wezly = [2, 3, 4, 5]
+    wspolrzedne = []
+    n = int(input("Podaj liczbę węzłów (2, 3, 4 lub 5): "))
+    if n == 2:
+        wspolrzedne.append(-0.7071067811865475244)
+        wspolrzedne.append(0.7071067811865475244)
+    elif n == 3:
+        wspolrzedne.append(-0.8660254037844386468)
+        wspolrzedne.append(0.0000000000000000000)
+        wspolrzedne.append(0.8660254037844386468)
+    elif n == 4:
+        wspolrzedne.append(-0.9238795325112867561)
+        wspolrzedne.append(-0.3826834323650897717)
+        wspolrzedne.append(0.3826834323650897717)
+        wspolrzedne.append(0.9238795325112867561)
+    elif n == 5:
+        wspolrzedne.append(-0.9510565162951535721)
+        wspolrzedne.append(-0.5877852522924731292)
+        wspolrzedne.append(0.0000000000000000000)
+        wspolrzedne.append(0.5877852522924731292)
+        wspolrzedne.append(0.9510565162951535721)
+    else:
+        print("Wprowadź '2', '3', '4' lub '5'.")
+
+    wynik = 0
+    for i in wspolrzedne:
+        wynik += funkcja_waga(funkcja, i)
+
+    print("-----Kwadratura Gaussa-Czebyszewa-----")
+    print("Wynik całki:", wynik, "z", n, "węzłami.")
+
