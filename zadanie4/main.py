@@ -42,11 +42,9 @@ if metoda == "a":
     b = 1
     wynik = None
     wynik_poprzedni = None
-    liczba_przedzialow = None
+    liczba_przedzialow = 2    # musi być parzysta, zwiększana, żeby osiągnąć lepszą dokładność
     dokladnosc_flaga = True
-    liczba_iteracji = 1
     while dokladnosc_flaga:
-        liczba_przedzialow = 2  # musi być parzysta, zwiększana, żeby osiągnąć lepszą dokładność
         h = (b - a) / liczba_przedzialow  # długość jednego podprzedziału
         x = []
         for i in range(liczba_przedzialow + 1):  # generuje liczba_przedzialow + 1 punktów
@@ -57,16 +55,12 @@ if metoda == "a":
                 wynik += funkcja(x[i]) * 4
             else:
                 wynik += funkcja(x[i]) * 2
-        wynik = 1 / 3 * h * wynik
-        if liczba_iteracji == 1:
-            wynik_poprzedni = wynik
-        if abs(wynik - wynik_poprzedni) < epsilon :
+        wynik = (1 / 3) * h * wynik
+        if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon :
             dokladnosc_flaga = False
-            liczba_iteracji = liczba_iteracji + 1
         else:
-            liczba_przedzialow = liczba_przedzialow * 2
+            liczba_przedzialow *= 2
             wynik_poprzedni = wynik
-            liczba_iteracji = liczba_iteracji + 1
 
     print("Wynik całki:", wynik, "z", liczba_przedzialow, "podprzedziałami.")
 
