@@ -90,11 +90,11 @@ if metoda == "a":
                 wynik_poprzedni = wynik
     else:
 
+        liczba_przedzialow = 4
         wynik = 0
-        wynik_poprzedni = None
         krok = 0.5
         srodek_przedzalu = 0
-        liczba_przedzialow = 2
+        wynik_poprzedni = None
         nie_wlasciwa_flaga = True
 
         # część dodatnia (od 0 do 1)
@@ -109,44 +109,61 @@ if metoda == "a":
             b = min(b, 1)
 
             wynik_czastkowy = simpson(funkcja, a, b, liczba_przedzialow)
-            wynik += wynik_czastkowy
 
             if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon:
                 nie_wlasciwa_flaga = False
-            else:
-                wynik_poprzedni = wynik
-                srodek_przedzalu += krok
-                krok = krok / 2 # zmiejszamy długość przedziąłu o połowę
 
-        wynik_poprzedni = None
-        krok = -0.5
+            wynik += wynik_czastkowy
+            wynik_poprzedni = wynik
+            srodek_przedzalu = b
+            krok = krok / 2
+
+
+        krok = 0.5
         srodek_przedzalu = 0
+        wynik_poprzedni = None
         nie_wlasciwa_flaga = True
 
         # część ujemna (od -1 do 0)
         while nie_wlasciwa_flaga:
-            a = srodek_przedzalu + krok
+
+            # nowy podprzedział, na którym chcemy obliczyć kolejną „cząstkową” całkę
+            a = srodek_przedzalu - krok
             b = srodek_przedzalu
+
+            # sprawdzenie, czy granicy całkowania nie zostały przekroczone
             a = max(a, -1)
             b = min(b, 0)
+
             wynik_czastkowy = simpson(funkcja, a, b, liczba_przedzialow)
-            wynik += wynik_czastkowy
 
             if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon:
                 nie_wlasciwa_flaga = False
-            else:
-                wynik_poprzedni = wynik
-                srodek_przedzalu += krok
-                krok = krok / 2
+
+            wynik += wynik_czastkowy
+            wynik_poprzedni = wynik
+            srodek_przedzalu = a
+            krok = krok / 2
 
     print("-------Złożona kwadratura Newtona-Cotesa (wzór Simpsona)-------")
     print("Wynik całki:", wynik, "z", liczba_przedzialow, "podprzedziałami.")
 
 # !!!!! dla b i c dziwne wyniki daje !!!!!!
 if metoda == "b":
+    n = None
+    n_flaga = True
     wspolrzedne = []
     wspolczynniki = [1.5707963267948966192, 1.0471975511965977462, 0.7853981633974483096, 0.6283185307179586477]
-    n = int(input("Podaj liczbę węzłów (2, 3, 4 lub 5): "))
+    while n_flaga:
+        try:
+            n = int(input("Podaj liczbę węzłów (2, 3, 4 lub 5): "))
+            if n in (2, 3, 4, 5):
+                n_flaga = False
+            else:
+                print("Wprowadź '2', '3', '4' lub '5'.")
+        except ValueError:
+            print("Wprowadź liczbę całkowitą.")
+
     if n == 2:
         wspolrzedne.append(-0.7071067811865475244)
         wspolrzedne.append(0.7071067811865475244)
