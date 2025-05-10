@@ -69,35 +69,83 @@ if metoda == "a":
             epsilon_flaga = False
         else:
             print("Wartość epsilon nia może być ujemna.")
+
     a = -1
     b = 1
     wynik = 0
     wynik_poprzedni = None
-    liczba_przedzialow = 2    # musi być parzysta, zwiększana, żeby osiągnąć lepszą dokładność
+    liczba_przedzialow = 2  # musi być parzysta, zwiększana, żeby osiągnąć lepszą dokładność
     dokladnosc_flaga = True
-    while dokladnosc_flaga:
-        h = (b - a) / liczba_przedzialow  # długość jednego podprzedziału
-        x = []
-        for i in range(liczba_przedzialow + 1):  # generuje liczba_przedzialow + 1 punktów
-            x.append(a + i * h)
-        wynik = funkcja(x[0]) + funkcja(x[len(x) - 1])  # pierwszy i ostatni punkt
-        for i in range(1, len(x) - 1):
-            if i % 2 != 0:
-                wynik += funkcja(x[i]) * 4
+
+    if czy_wlasciwa(funkcja_literka):
+
+        while dokladnosc_flaga:
+
+            wynik = simpson(funkcja, a, b, liczba_przedzialow)
+
+            if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon:
+                dokladnosc_flaga = False
             else:
-                wynik += funkcja(x[i]) * 2
-        wynik = (1 / 3) * h * wynik
-        if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon :
-            dokladnosc_flaga = False
-        else:
-            liczba_przedzialow *= 2
-            wynik_poprzedni = wynik
+                liczba_przedzialow *= 2
+                wynik_poprzedni = wynik
+    else:
+
+        wynik = 0
+        wynik_poprzedni = None
+        krok = 0.5
+        srodek_przedzalu = 0
+        liczba_przedzialow = 2
+        nie_wlasciwa_flaga = True
+
+        # część dodatnia (od 0 do 1)
+        while nie_wlasciwa_flaga:
+
+            # nowy podprzedział, na którym chcemy obliczyć kolejną „cząstkową” całkę
+            a = srodek_przedzalu
+            b = srodek_przedzalu + krok
+
+            # sprawdzenie, czy granicy całkowania nie zostały przekroczone
+            a = max(a, 0)
+            b = min(b, 1)
+
+            wynik_czastkowy = simpson(funkcja, a, b, liczba_przedzialow)
+            wynik += wynik_czastkowy
+
+            if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon:
+                nie_wlasciwa_flaga = False
+            else:
+                wynik_poprzedni = wynik
+                srodek_przedzalu += krok
+                krok = krok / 2 # zmiejszamy długość przedziąłu o połowę
+
+        wynik_poprzedni = None
+        krok = -0.5
+        srodek_przedzalu = 0
+        nie_wlasciwa_flaga = True
+
+        # część ujemna (od -1 do 0)
+        while nie_wlasciwa_flaga:
+            a = srodek_przedzalu + krok
+            b = srodek_przedzalu
+            a = max(a, -1)
+            b = min(b, 0)
+            wynik_czastkowy = simpson(funkcja, a, b, liczba_przedzialow)
+            wynik += wynik_czastkowy
+
+            if wynik_poprzedni is not None and abs(wynik - wynik_poprzedni) < epsilon:
+                nie_wlasciwa_flaga = False
+            else:
+                wynik_poprzedni = wynik
+                srodek_przedzalu += krok
+                krok = krok / 2
 
     print("-------Złożona kwadratura Newtona-Cotesa (wzór Simpsona)-------")
     print("Wynik całki:", wynik, "z", liczba_przedzialow, "podprzedziałami.")
 
+# !!!!! dla b i c dziwne wyniki daje !!!!!!
 if metoda == "b":
     wspolrzedne = []
+    wspolczynniki = [1.5707963267948966192, 1.0471975511965977462, 0.7853981633974483096, 0.6283185307179586477]
     n = int(input("Podaj liczbę węzłów (2, 3, 4 lub 5): "))
     if n == 2:
         wspolrzedne.append(-0.7071067811865475244)
@@ -122,8 +170,7 @@ if metoda == "b":
 
     wynik = 0
     for i in wspolrzedne:
-        wynik += funkcja_waga(funkcja, i)
+        wynik += wspolczynniki[n-2] * funkcja_waga(funkcja, i)
 
     print("-----Kwadratura Gaussa-Czebyszewa-----")
     print("Wynik całki:", wynik, "z", n, "węzłami.")
-
