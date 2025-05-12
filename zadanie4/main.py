@@ -10,12 +10,14 @@ while funkcja_literka_flaga:
     print("b) f(x) = 4x^3 - 3x")
     print("c) f(x) = sqrt(1 - x^2)")
     print("d) f(x) = x^4 - 2x^2 + 1")
+    print("e) f(x) = (x^3 - x + 1) / sqrt(1 - x^2)")
+    print("f) f(x) = 3x^4 / sqrt(1 - x^2)")
 
     funkcja_literka = input("Wybrano: ").lower()
-    if funkcja_literka == "a" or funkcja_literka == "b" or funkcja_literka == "c" or funkcja_literka == "d":
+    if funkcja_literka == "a" or funkcja_literka == "b" or funkcja_literka == "c" or funkcja_literka == "d" or funkcja_literka == "e" or funkcja_literka == "f":
         funkcja_literka_flaga = False
     else:
-        print("Wprowadź 'a', 'b', 'c' lub 'd'.")
+        print("Wprowadź 'a', 'b', 'c', 'd', 'e' lub 'f'.")
 
 funkcja = wybor_funkcji(funkcja_literka)
 
@@ -63,7 +65,9 @@ if metoda == "a":
                 wynik_poprzedni = wynik
     else:
 
-        liczba_przedzialow = 4
+        print("Wybrana funkcja jest niewłaściwa.")
+
+        liczba_przedzialow = 2
         wynik = 0
         krok = 0.5
         srodek_przedzalu = 0
@@ -158,10 +162,10 @@ if metoda == "b":
         for i in wspolrzedne:
             f = None
             if funkcja_literka == "b" or funkcja_literka == "d":
-                f = horner(i, wspolczynniki)
+                f = lambda x: horner(x, wspolczynniki)
             else:
-                f = funkcja(i)
-            wynik += waga * funkcja_waga(lambda x: f, i)
+                f = funkcja
+            wynik += waga * funkcja_waga (f, i)
 
         print("-----Kwadratura Gaussa-Czebyszewa-----")
         print("Wynik całki:", wynik, "z", n, "węzłami.")

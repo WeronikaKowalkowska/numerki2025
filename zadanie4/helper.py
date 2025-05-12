@@ -12,6 +12,10 @@ def wybor_funkcji(literka):
         return lambda x: np.sqrt(1 - x ** 2)
     if literka == 'd':
         return lambda x: x ** 4 - 2 * x ** 2 + 1
+    if literka == 'e':
+        return lambda x: (x ** 3 - x + 1) / np.sqrt(1 - x ** 2)
+    if literka == 'f':
+        return lambda x: (3 * x ** 4) / np.sqrt(1 - x ** 2)
 
 
 def funkcja_text(funkcja):
@@ -23,11 +27,15 @@ def funkcja_text(funkcja):
         return "sqrt(1 - x ** 2)"
     if funkcja == 'd':
         return "x ** 4 - 2 * x ** 2 + 1"
+    if funkcja == 'e':
+        return "(x ** 3 - x + 1) / sqrt(1 - x ** 2)"
+    if funkcja == 'f':
+        return "(3 * x ** 4) / sqrt(1 - x ** 2)"
 
 
 def czy_wlasciwa(funkcja_literka):
     x = symbols('x')
-    funkcja = sympify(funkcja_literka)
+    funkcja = sympify(funkcja_text(funkcja_literka))
     dziedzina = continuous_domain(funkcja, x,
                                   S.Reals)  # wyznaczenie dziedziny ciągłości funkcji f względem zmiennej x w zbiorze liczb rzeczywistych
     return dziedzina.contains(-1) and dziedzina.contains(
