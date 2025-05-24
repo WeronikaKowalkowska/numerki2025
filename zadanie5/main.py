@@ -115,8 +115,31 @@ for k in range(stopien + 1):
     wspolczynniki_wielomianu.append(wsp * calka)
 
 y_aproksymacji = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
-wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji)
+wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji).show()
 
-# wielomian aproksymacyjny podanego stopnia
-# rysuje jego wykres
-# oblicza błąd aproksymacji
+# czy nie wyświetla zawsze o 1 mniej ?
+wyswietl_wielomian_aproksymacjyny_sformatowany(wspolczynniki_wielomianu[::-1])  # odwracamy współczynniki, bo numpy/poly1d zakłada malejącą potęgę
+
+# pokazanie różnicy na wybranej wartości (może do sprawka się przyda)
+pozycja = None
+wartosc_sprawdzenia = (x2-x1)/2
+for i in range (len(x_aproksymacji)):
+    if x_aproksymacji[i] == wartosc_sprawdzenia:
+        pozycja = i
+        break
+
+f = None
+
+if wspolczynniki is not None:
+    f = lambda x: horner(x, wspolczynniki)
+else:
+    f = funkcja
+
+y_funkcji = np.vectorize(f)(x_aproksymacji)
+
+print(f"Wynik funkcji dla x = {wartosc_sprawdzenia}: ", y_funkcji[pozycja])
+print(f"Wynik wielomianu aproksymującego dla x = {wartosc_sprawdzenia}: ", y_aproksymacji[pozycja])
+
+# na szybko - chyba inaczej ma być
+blad_aproksymacji(y_funkcji, y_aproksymacji)
+

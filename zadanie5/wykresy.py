@@ -5,7 +5,7 @@ import numpy as np
 
 def wyswietl_funkcje(x, funkcja):
     y = funkcja(x) / np.sqrt(1 - x ** 2)
-    return wyswietl_wykres(x, y)
+    return wyswietl_wykres(x, y, "Wykres funkcji:")
 
 
 def wyswietl_wielomian(x, wspolczynniki):
@@ -19,12 +19,12 @@ def wyswietl_wielomian(x, wspolczynniki):
         else:
             print(f"x = {x[i]} poza zakresem <-1, 1>, pomijam.")
             y.append(np.nan)
-    return wyswietl_wykres(x, y)
+    return wyswietl_wykres(x, y, "Wykres funkcji:")
 
 
-def wyswietl_wykres(x, y):
-    plt.plot(x, y)
-    plt.title("Wykres funkcji:")
+def wyswietl_wykres(x, y, text):
+    plt.plot(x, y, color="pink")
+    plt.title(text)
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.subplots_adjust(left=0.15)
@@ -35,7 +35,24 @@ def wyswietl_wykres(x, y):
 
 
 def wyswietl_aproksymacje(x, y):
-    print("x aproksymacje: ")
-    print(x)
-    print("y aproksymacje: ")
-    print(y)
+    return wyswietl_wykres(x, y, "Wykres wielomianu aproksymującego:")
+
+
+def wyswietl_wielomian_aproksymacjyny_sformatowany(wspolczynniki):
+    stopien = len(wspolczynniki) - 1
+    wynik = ""
+    for i, wsp in enumerate(wspolczynniki):
+        potega = stopien - i
+        if abs(wsp) < 1e-6:  # pomiń zerowe współczynniki
+            continue
+        znak = " + " if wsp > 0 else " - "
+        wsp_abs = abs(wsp)
+        if wynik == "":
+            znak = "-" if wsp < 0 else ""
+        if potega > 1:
+            wynik += f"{znak}{wsp_abs:.5f} x^{potega}"
+        elif potega == 1:
+            wynik += f"{znak}{wsp_abs:.5f} x"
+        else:
+            wynik += f"{znak}{wsp_abs:.5f}"
+    print("Wielomian aproksymujący:\n" + wynik)
