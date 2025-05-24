@@ -25,6 +25,7 @@ def wybor_funkcji(literka):
     if literka == 'h':
         return lambda x: np.cos(2 * x + 1)
 
+
 # 1) WYBÓR FUNKCJI
 print("Wybierz funkcję:")
 print("a) f(x) = (x^3+5x^2−2x−10)/sqrt(1 - x^2)")
@@ -50,25 +51,25 @@ elif funkcja_literka == "b":
     wspolczynniki = [3, 3, -18, 0]
 
 # 2) WYŚWIETLENIE FUNKCJI
-x = np.linspace(-20, 20, 400)
-funkcja=wybor_funkcji(funkcja_literka)
+x = np.linspace(-1, 1, 1000)
+funkcja = wybor_funkcji(funkcja_literka)
 
 if wspolczynniki:
-    wyswietl_wielomian(x, wspolczynniki)
+    wyswietl_wielomian(x, wspolczynniki).show()
 else:
-    wyswietl_funkcje(x,funkcja)
+    wyswietl_funkcje(x, funkcja).show()
 
 x1 = -1
 x2 = 1
 print("Działanie na przedziale <-1,1>. \n"
       "Jeśli chcesz zmniejszyć przedział podaj wartość liczbową x1. W przeciwnym wypadku przejdź dalej.\n"
       "Uwaga! Pamiętaj, że x1 < x2 ")
-newX1=input()
-if -1<=float(newX1)<=1:
-    newX2=input("Podaj wartość x2: ")
-    if float(newX1)<=float(newX2)<=1:
-        x1=float(newX1)
-        x2=float(newX2)
+newX1 = float(input("Podaj wartość x1: "))
+if -1 <= newX1 <= 1:
+    newX2 = float(input("Podaj wartość x2: "))
+    if newX1 <= newX2 <= 1:
+        x1 = newX1
+        x2 = newX2
     else:
         print("Wprowadzona wartość x2 jest jest niepoprawna. Operujemy na domyślnym przedziale <-1,1> ")
 else:
@@ -93,28 +94,28 @@ while test:
     else:
         test = False
 
-
 # wartości współczynników wielomianów aproksymacyjnych należy wyliczać w sposób iteracyjny
 # i zapamiętywać w tablicy tak, aby możliwe było wykorzystanie tych współczynników w schemacie Hornera.
 
 wspolczynniki_wielomianu = []
+x_aproksymacji = np.linspace(x1, x2, 1000)
 
-for k in range(stopien+1):
-
-    f_licznik = funkcja(x) * T_k(x, k)
-   # f_mianownik = T_k(x, k) * T_k(x, k)
+for k in range(stopien + 1):
+    T = T_k(x_aproksymacji, k)
+    f_vals = np.vectorize(funkcja)(x_aproksymacji)
+    f_licznik = f_vals * T
+    # f_mianownik = T_k(x, k) * T_k(x, k)
 
     if k == 0:
         wsp = 1 / np.pi
     else:
         wsp = 2 / np.pi
 
-    calka = (wykonaj_calke(f_licznik, ilosc_wezlow, None))
+    calka = (wykonaj_calke(lambda x: funkcja(x) * T_k(x, k), ilosc_wezlow, None))
     wspolczynniki_wielomianu.append(wsp * calka)
 
-x_aproksymacji = np.linspace(-1, 1, 500)
-wynik = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
-
+y_aproksymacji = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
+wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji)
 
 # wielomian aproksymacyjny podanego stopnia
 # rysuje jego wykres

@@ -8,13 +8,13 @@ def horner(argument, wspolczynniki):
     return wynik
 
 def T_k(x, k):
-    if -1 <= x <= 1:
-        return np.cos(k * np.arccos(x))
-    else:
+    x = np.array(x)  # zapewnia wektorową obsługę
+    if np.any((x < -1) | (x > 1)):
         raise ValueError("x musi być w przedziale [-1, 1]")
+    return np.cos(k * np.arccos(x))
 
 def aproksymacja(x, wspolczynniki):
-    suma = 0
+    suma = np.zeros_like(x) # zapewnia wektorową obsługę
     for k, a in enumerate(wspolczynniki):
         suma += a * T_k(x, k)
     return suma
