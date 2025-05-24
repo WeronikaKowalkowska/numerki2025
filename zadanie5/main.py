@@ -1,5 +1,4 @@
 import numpy as np
-from sympy import false
 
 from calkowanie import wykonaj_calke
 from horner import *
@@ -131,7 +130,7 @@ for i in range (len(x_aproksymacji)):
 f = None
 
 if wspolczynniki is not None:
-    f = lambda x: horner(x, wspolczynniki)
+    f = lambda x: horner(x, wspolczynniki_wielomianu)
 else:
     f = funkcja
 
