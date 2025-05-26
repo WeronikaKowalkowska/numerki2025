@@ -5,7 +5,7 @@ from helper import *
 
 
 def funkcja_waga(f, x):
-    return f(x)  / np.sqrt(1 - x**2)
+    return f(x)
 
 
 # chcesz liczyć z wagą, to podajesz bez wagi
@@ -14,13 +14,13 @@ def wykonaj_calke(funkcja, n):
     waga = np.pi / n
     wynik = 0
     for i in wezly:
-        wynik += funkcja_waga(funkcja, i)
+         wynik += funkcja_waga(funkcja, i)
     return waga * wynik
 
 
 def oblicz_wspolczynniki(funkcja, ilosc_wezlow, stopien):
     wspolczynniki_wielomianu = []
-    for k in range(stopien + 1):
+    for k in range(stopien +1):
         gk = lambda x: T_k(x, k)
         licznik = wykonaj_calke(lambda x: funkcja(x) * gk(x), ilosc_wezlow)
         mianownik = wykonaj_calke(lambda x: gk(x) ** 2, ilosc_wezlow)

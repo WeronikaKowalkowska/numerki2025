@@ -1,3 +1,4 @@
+
 import numpy as np
 
 from calkowanie import wykonaj_calke, oblicz_wspolczynniki
@@ -8,9 +9,9 @@ from wykresy import *
 # funkcja zwracająca wyrażenie matematyczne w zależności od wyboru użytkownika
 def wybor_funkcji(literka):
     if literka == 'a':
-        return lambda x: x ** 3 + 5 * x ** 2 - 2 * x - 10  # horner
+        return lambda x: x ** 3 + 5 * x # horner
     if literka == 'b':
-        return lambda x: 3 * x ** 3 + 3 * x ** 2 - 18 * x  # horner
+        return lambda x: 3 * x ** 2 + 3  # horner
     if literka == 'c':
         return lambda x: np.sin(x)
     if literka == 'd':
@@ -24,17 +25,38 @@ def wybor_funkcji(literka):
     if literka == 'h':
         return lambda x: np.cos(2 * x + 1)
 
+# def wybor_funkcji(literka):
+#     if literka == 'a':
+#         return lambda x: x
+#     if literka == 'b':
+#         return lambda x: x**2
+#     if literka == 'c':
+#         return lambda x: x**3
+#     if literka == 'd':
+#         return lambda x: np.sin(x)
+#     if literka == 'e':
+#         return lambda x: np.cos(x)
+#     if literka == 'f':
+#         return lambda x: np.abs(x - 4)
+#     if literka == 'g':
+#         return lambda x: 1 / (1 + x**2)
+#     if literka == 'h':
+#         return lambda x: np.log(1 + x)
+
+
+
 
 # 1) WYBÓR FUNKCJI
-print("Wybierz funkcję:")
-print("a) f(x) = (x^3+5x^2−2x−10)/sqrt(1 - x^2)")
-print("b) f(x) = (3x^3+3x^2-18x)/sqrt(1 - x^2)")
-print("c) f(x) = (sin(x))/sqrt(1 - x^2)")
-print("d) f(x) = (cos(x))/sqrt(1 - x^2)")
-print("e) f(x) = (|x + 2|)/sqrt(1 - x^2)")
-print("f) f(x) = (|5 - x|)/sqrt(1 - x^2)")
-print("g) f(x) = (sin((1/2)x))/sqrt(1 - x^2)")
-print("h) f(x) = (cos(2x+1))/sqrt(1 - x^2)")
+print("Wybierz funkcję: (wszystkie zawierają wagę 1/(sqrt(1 - x^2))")
+print("a) f(x) = (x^3+5x)")
+print("b) f(x) = (3x^2+3)")
+print("c) f(x) = (sin(x))")
+print("d) f(x) = (cos(x))")
+print("e) f(x) = (|x + 2|)")
+print("f) f(x) = (|5 - x|)")
+print("g) f(x) = (sin((1/2)x))")
+print("h) f(x) = (cos(2x+1))")
+
 
 funkcja_literka_flaga = True
 funkcja_literka = input("Wybrano: ").lower()
@@ -46,9 +68,9 @@ while funkcja_literka_flaga:
 
 wspolczynniki = None
 if funkcja_literka == "a":
-    wspolczynniki = [1, 5, -2, -10]
+    wspolczynniki = [1, 0, 5, 0]
 elif funkcja_literka == "b":
-    wspolczynniki = [3, 3, -18, 0]
+    wspolczynniki = [3, 0, 3]
 
 # 2) WYŚWIETLENIE WYKRESU FUNKCJI
 x = np.linspace(-0.999, 0.999, 1000)
@@ -108,12 +130,12 @@ while test:
 wspolczynniki_wielomianu = []
 x_aproksymacji = np.linspace(x1, x2, 50)
 y_aproksymacji = []
-y_aproksymacji_wazony = []
 y_funkcji = []
 
 # wartości współczynników wielomianów
 if blad_dopuszczalny > 0:
     stopien = 1
+    stopien_wyswietl=0
     flaga = True
     while flaga:
 
@@ -123,27 +145,34 @@ if blad_dopuszczalny > 0:
         f = None
 
         if wspolczynniki is not None:
-            f = lambda x: horner(x, wspolczynniki_wielomianu)
+            f = lambda x: horner(x, wspolczynniki)
         else:
             f = funkcja
 
         y_funkcji = np.vectorize(f)(x_aproksymacji)
 
         blad = blad_aproksymacji(y_funkcji, y_aproksymacji)
-        print(f"Stopień: {stopien}, Błąd: {blad:.5e}")
+        print(f"Stopień: {stopien_wyswietl}, Błąd: {blad:.10e}")
 
         if blad < blad_dopuszczalny:
             flaga = False
-        stopien += 1
+            print(f"Osiągnięto wymagany błąd przy stopniu: {stopien_wyswietl}")
+        else:
+            stopien += 1
+            stopien_wyswietl+=1
 
-    print(f"Osiągnięto wymagany błąd przy stopniu: {stopien}")
+        if stopien==101:
+            print ("Osiągnięto maksymalny możliwy stopień. Zaprzestanie dalszych obliczeń.")
+            flaga=False
+
+
 
 else:
     wspolczynniki_wielomianu = oblicz_wspolczynniki(funkcja, ilosc_wezlow, stopien)
     y_aproksymacji = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
 
     if wspolczynniki is not None:
-        f = lambda x: horner(x, wspolczynniki_wielomianu)
+        f = lambda x: horner(x, wspolczynniki)
     else:
         f = funkcja
 
@@ -155,3 +184,5 @@ wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji).show()
 # 4) WYŚWIETLENIE WZORU NA WIELOMIAN APROKSYMACYJNY
 wyswietl_wielomian_aproksymacjyny_sformatowany(
     wspolczynniki_wielomianu[::-1])  # odwracamy współczynniki, bo numpy/poly1d zakłada malejącą potęgę
+
+
