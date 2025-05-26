@@ -4,8 +4,8 @@ import numpy as np
 
 
 def wyswietl_funkcje(x, funkcja):
-    #y = funkcja(x) / np.sqrt(1 - x ** 2)
-    y = funkcja(x)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        y = funkcja(x) / np.sqrt(1 - x ** 2)
     return wyswietl_wykres(x, y, "Wykres funkcji:")
 
 
@@ -14,8 +14,7 @@ def wyswietl_wielomian(x, wspolczynniki):
     for i in range(len(x)):
         if -1 < x[i] < 1:
             try:
-                # y.append(horner(x[i], wspolczynniki) / np.sqrt(1 - x[i] ** 2))
-                y.append(horner(x[i], wspolczynniki))
+                y.append(horner(x[i], wspolczynniki)/ np.sqrt(1 - x[i] ** 2))
             except FloatingPointError:
                 print("Błąd: sqrt z liczby ujemnej. Sprawdź zakres x.")
         else:
@@ -29,6 +28,8 @@ def wyswietl_wykres(x, y, text):
     plt.title(text)
     plt.xlabel("X")
     plt.ylabel("Y")
+    plt.xlim(-1, 1)
+    plt.ylim(-10, 10)
     plt.subplots_adjust(left=0.15)
     plt.grid()
     plt.axhline(0, color='black', linewidth=0.8)

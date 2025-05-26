@@ -1,4 +1,3 @@
-
 import numpy as np
 
 from calkowanie import wykonaj_calke, oblicz_wspolczynniki
@@ -9,7 +8,7 @@ from wykresy import *
 # funkcja zwracająca wyrażenie matematyczne w zależności od wyboru użytkownika
 def wybor_funkcji(literka):
     if literka == 'a':
-        return lambda x: x ** 3 + 5 * x # horner
+        return lambda x: x ** 3 + 5 * x  # horner
     if literka == 'b':
         return lambda x: 3 * x ** 2 + 3  # horner
     if literka == 'c':
@@ -25,26 +24,6 @@ def wybor_funkcji(literka):
     if literka == 'h':
         return lambda x: np.cos(2 * x + 1)
 
-# def wybor_funkcji(literka):
-#     if literka == 'a':
-#         return lambda x: x
-#     if literka == 'b':
-#         return lambda x: x**2
-#     if literka == 'c':
-#         return lambda x: x**3
-#     if literka == 'd':
-#         return lambda x: np.sin(x)
-#     if literka == 'e':
-#         return lambda x: np.cos(x)
-#     if literka == 'f':
-#         return lambda x: np.abs(x - 4)
-#     if literka == 'g':
-#         return lambda x: 1 / (1 + x**2)
-#     if literka == 'h':
-#         return lambda x: np.log(1 + x)
-
-
-
 
 # 1) WYBÓR FUNKCJI
 print("Wybierz funkcję: (wszystkie zawierają wagę 1/(sqrt(1 - x^2))")
@@ -56,7 +35,6 @@ print("e) f(x) = (|x + 2|)")
 print("f) f(x) = (|5 - x|)")
 print("g) f(x) = (sin((1/2)x))")
 print("h) f(x) = (cos(2x+1))")
-
 
 funkcja_literka_flaga = True
 funkcja_literka = input("Wybrano: ").lower()
@@ -73,31 +51,31 @@ elif funkcja_literka == "b":
     wspolczynniki = [3, 0, 3]
 
 # 2) WYŚWIETLENIE WYKRESU FUNKCJI
-x = np.linspace(-0.999, 0.999, 1000)
+x = np.linspace(-1, 1, 1000)
 funkcja = wybor_funkcji(funkcja_literka)
 if wspolczynniki:
     wyswietl_wielomian(x, wspolczynniki).show()
 else:
-    wyswietl_funkcje(x, funkcja).show()
+    wyswietl_funkcje(x,funkcja).show()
 
-x1 = -0.999
-x2 = 0.999
-print("Działanie na przedziale <-0.999, 0.999>. \n"
+x1 = -1
+x2 = 1
+print("Działanie na przedziale <-1, 1>. \n"
       "Jeśli chcesz zmniejszyć przedział podaj wartość liczbową x1 (lub 2 jeżeli chcesz zostać przy domyślnym przedziale): \n"
-      "Uwaga! Pamiętaj, że x1 < x2 ")
+      "Uwaga! Pamiętaj, że x1 < x2. ")
 try:
     newX1 = float(input("Podaj wartość x1: "))
-    if -0.999 <= newX1 <= 0.999:
+    if -1 <= newX1 <= 1:
         newX2 = float(input("Podaj wartość x2: "))
         if newX1 < newX2:
             x1 = newX1
             x2 = newX2
         else:
-            print("Operujemy na domyślnym przedziale <-0.999, 0.999> ")
+            print("Operujemy na domyślnym przedziale <-1, 1>. ")
     else:
-        print("Operujemy na domyślnym przedziale <-0.999, 0.999> ")
+        print("Operujemy na domyślnym przedziale <-1, 1>. ")
 except ValueError:
-    print("Niepoprawna wartość. Operujemy na domyślnym przedziale <-0.999, 0.999>.")
+    print("Niepoprawna wartość. Operujemy na domyślnym przedziale <-1, 1>.")
 
 blad_dopuszczalny = None
 stopien = None
@@ -135,7 +113,6 @@ y_funkcji = []
 # wartości współczynników wielomianów
 if blad_dopuszczalny > 0:
     stopien = 1
-    stopien_wyswietl=0
     flaga = True
     while flaga:
 
@@ -152,18 +129,17 @@ if blad_dopuszczalny > 0:
         y_funkcji = np.vectorize(f)(x_aproksymacji)
 
         blad = blad_aproksymacji(y_funkcji, y_aproksymacji)
-        print(f"Stopień: {stopien_wyswietl}, Błąd: {blad:.10e}")
+        print(f"Stopień: {stopien}, Błąd: {blad:.10e}")
 
         if blad < blad_dopuszczalny:
             flaga = False
-            print(f"Osiągnięto wymagany błąd przy stopniu: {stopien_wyswietl}")
+            print(f"Osiągnięto wymagany błąd przy stopniu: {stopien}")
         else:
             stopien += 1
-            stopien_wyswietl+=1
 
-        if stopien==101:
-            print ("Osiągnięto maksymalny możliwy stopień. Zaprzestanie dalszych obliczeń.")
-            flaga=False
+        if stopien == 101:
+            print("Osiągnięto maksymalny możliwy stopień. Zaprzestanie dalszych obliczeń.")
+            flaga = False
 
 
 
@@ -184,5 +160,3 @@ wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji).show()
 # 4) WYŚWIETLENIE WZORU NA WIELOMIAN APROKSYMACYJNY
 wyswietl_wielomian_aproksymacjyny_sformatowany(
     wspolczynniki_wielomianu[::-1])  # odwracamy współczynniki, bo numpy/poly1d zakłada malejącą potęgę
-
-
