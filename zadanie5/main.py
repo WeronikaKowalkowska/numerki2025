@@ -1,7 +1,7 @@
 import numpy as np
 
-from calkowanie import wykonaj_calke
-from horner import *
+from calkowanie import wykonaj_calke, oblicz_wspolczynniki
+from helper import *
 from wykresy import *
 
 
@@ -51,33 +51,31 @@ elif funkcja_literka == "b":
     wspolczynniki = [3, 3, -18, 0]
 
 # 2) WYŚWIETLENIE WYKRESU FUNKCJI
-x = np.linspace(-1, 1, 1000)
+x = np.linspace(-0.999, 0.999, 1000)
 funkcja = wybor_funkcji(funkcja_literka)
-
 if wspolczynniki:
     wyswietl_wielomian(x, wspolczynniki).show()
 else:
     wyswietl_funkcje(x, funkcja).show()
 
-x1 = -1
-x2 = 1
-print("Działanie na przedziale <-1,1>. \n"
+x1 = -0.999
+x2 = 0.999
+print("Działanie na przedziale <-0.999, 0.999>. \n"
       "Jeśli chcesz zmniejszyć przedział podaj wartość liczbową x1 (lub 2 jeżeli chcesz zostać przy domyślnym przedziale): \n"
       "Uwaga! Pamiętaj, że x1 < x2 ")
 try:
     newX1 = float(input("Podaj wartość x1: "))
-    if -1 <= newX1 <= 1:
+    if -0.999 <= newX1 <= 0.999:
         newX2 = float(input("Podaj wartość x2: "))
-        if newX1 <= newX2 <= 1:
+        if newX1 < newX2:
             x1 = newX1
             x2 = newX2
         else:
-            print("Operujemy na domyślnym przedziale <-1,1> ")
+            print("Operujemy na domyślnym przedziale <-0.999, 0.999> ")
     else:
-        print("Operujemy na domyślnym przedziale <-1,1> ")
+        print("Operujemy na domyślnym przedziale <-0.999, 0.999> ")
 except ValueError:
-    print("Niepoprawna wartość. Operujemy na domyślnym przedziale.")
-
+    print("Niepoprawna wartość. Operujemy na domyślnym przedziale <-0.999, 0.999>.")
 
 blad_dopuszczalny = None
 stopien = None
@@ -94,6 +92,7 @@ while test:
                 print("Niepoprawna wartość. Wprowadź ponownie.")
             else:
                 test2 = False
+                test = False
     else:
         test = False
 
@@ -106,27 +105,19 @@ while test:
     else:
         test = False
 
-
 wspolczynniki_wielomianu = []
 x_aproksymacji = np.linspace(x1, x2, 50)
-
 y_aproksymacji = []
+y_aproksymacji_wazony = []
 y_funkcji = []
+
 # wartości współczynników wielomianów
 if blad_dopuszczalny > 0:
     stopien = 1
     flaga = True
     while flaga:
-        wspolczynniki_wielomianu = []
-        for k in range(stopien + 1):
-            gk = lambda x: T_k(x, k) # funkcja bazowa: wielomian Czebyszewa stopnia k
 
-            licznik = wykonaj_calke(lambda x: funkcja(x) * gk(x), ilosc_wezlow, None)
-            mianownik = wykonaj_calke(lambda x: gk(x) ** 2, ilosc_wezlow, None)
-
-            c_k = licznik / mianownik
-            wspolczynniki_wielomianu.append(c_k)
-
+        wspolczynniki_wielomianu = oblicz_wspolczynniki(funkcja, ilosc_wezlow, stopien)
         y_aproksymacji = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
 
         f = None
@@ -139,6 +130,7 @@ if blad_dopuszczalny > 0:
         y_funkcji = np.vectorize(f)(x_aproksymacji)
 
         blad = blad_aproksymacji(y_funkcji, y_aproksymacji)
+        print(f"Stopień: {stopien}, Błąd: {blad:.5e}")
 
         if blad < blad_dopuszczalny:
             flaga = False
@@ -147,18 +139,8 @@ if blad_dopuszczalny > 0:
     print(f"Osiągnięto wymagany błąd przy stopniu: {stopien}")
 
 else:
-    for k in range(stopien + 1):
-        gk = lambda x: T_k(x, k)  # funkcja bazowa: wielomian Czebyszewa stopnia k
-
-        licznik = wykonaj_calke(lambda x: funkcja(x) * gk(x), ilosc_wezlow, None)
-        mianownik = wykonaj_calke(lambda x: gk(x) ** 2, ilosc_wezlow, None)
-
-        c_k = licznik / mianownik
-        wspolczynniki_wielomianu.append(c_k)
-
+    wspolczynniki_wielomianu = oblicz_wspolczynniki(funkcja, ilosc_wezlow, stopien)
     y_aproksymacji = aproksymacja(x_aproksymacji, wspolczynniki_wielomianu)
-
-    f = None
 
     if wspolczynniki is not None:
         f = lambda x: horner(x, wspolczynniki_wielomianu)
@@ -170,6 +152,6 @@ else:
 # 3) WYŚWIETLENIE WYKRESU APROKSYMACJI
 wyswietl_aproksymacje(x_aproksymacji, y_aproksymacji).show()
 
-#43) WYŚWIETLENIE WZORU NA WIELOMIAN APROKSYMACYJNY
-wyswietl_wielomian_aproksymacjyny_sformatowany(wspolczynniki_wielomianu[::-1])  # odwracamy współczynniki, bo numpy/poly1d zakłada malejącą potęgę
-
+# 4) WYŚWIETLENIE WZORU NA WIELOMIAN APROKSYMACYJNY
+wyswietl_wielomian_aproksymacjyny_sformatowany(
+    wspolczynniki_wielomianu[::-1])  # odwracamy współczynniki, bo numpy/poly1d zakłada malejącą potęgę

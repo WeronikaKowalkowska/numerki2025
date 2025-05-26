@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from horner import *
+from helper import *
 import numpy as np
 
 
@@ -35,7 +35,7 @@ def wyswietl_wykres(x, y, text):
 
 
 def wyswietl_aproksymacje(x, y):
-    return wyswietl_wykres(x, y, "Wykres wielomianu aproksymującego:")
+    return wyswietl_wykres(x, y, "Wykres wielomianu aproksymacyjnego:")
 
 
 def wyswietl_wielomian_aproksymacjyny_sformatowany(wspolczynniki):
