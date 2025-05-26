@@ -20,12 +20,6 @@ def aproksymacja(x, wspolczynniki):
     return suma
 
 def blad_aproksymacji(y_fun, y_apr):
-
-    # średni błąd kwadratowy (Mean Squared Error)
-    mse = np.mean((y_fun - y_apr) ** 2)
-
     # maksymalny błąd bezwzględny
     max_error = np.max(np.abs(y_fun - y_apr))
-
-    print(f"Średni błąd kwadratowy (MSE): {mse:.6f}")
-    print(f"Maksymalny błąd bezwzględny: {max_error:.6f}")
+    return max_error

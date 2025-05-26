@@ -4,7 +4,7 @@ from sympy.calculus.util import continuous_domain
 from horner import *
 
 def funkcja_waga(f, x):
-    return f(x) * np.sqrt(1 - x ** 2)
+    return f(x) / np.sqrt(1 - x ** 2)
 
 # chcesz liczyć z wagą, to podajesz bez wagi
 def wykonaj_calke(funkcja, n, wspolczynniki):
@@ -22,6 +22,3 @@ def wykonaj_calke(funkcja, n, wspolczynniki):
         wynik += waga * funkcja_waga(f, i)
 
     return wynik
-
-    # print("-----Kwadratura Gaussa-Czebyszewa-----")
-    # print("Wynik całki:", wynik, "z", n, "węzłami.")
